@@ -111,11 +111,11 @@ const AdjustedServiceValue = sql.define('adjusted_service_value', {
 });
 
 const ServiceTransaction = sql.define('service_transaction', {
-	service1_units: {
+	sender_svc_units: {
 		type: Sequelize.INTEGER,
 		allowNull: false
 	}, 
-	service2_units: {
+	receiver_svc_units: {
 		type: Sequelize.INTEGER,
 		allowNull: false,
 	}
@@ -157,6 +157,9 @@ User.hasMany(Review, { as: 'received_reviews',foreignKey: 'receiver_id'});
 
 module.exports.User = User;
 module.exports.Service = Service;
+module.exports.ServiceValue = ServiceValue;
+module.exports.AdjustedServiceValue = AdjustedServiceValue;
+module.exports.ServiceTransaction = ServiceTransaction;
 module.exports.Review = Review;
 module.exports.Message = Message;
 module.exports.Engagement = Engagement;
