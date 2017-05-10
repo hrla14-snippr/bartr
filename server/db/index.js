@@ -123,8 +123,10 @@ const ServiceTransaction = sql.define('service_transaction', {
 
 User.belongsTo(Service);
 Service.hasMany(User);
+User.hasOne(ServiceValue);
 Service.hasOne(ServiceValue);
-ServiceValue.hasOne(AdjustedServiceValue);
+ServiceValue.belongsTo(AdjustedServiceValue);
+AdjustedServiceValue.hasMany(ServiceValue);
 
 ServiceTransaction.belongsTo(Service, { as: 'sender_service', foreignKey: { name: 'sender_service_id', allowNull: false }, onDelete: 'CASCADE' });
 ServiceTransaction.belongsTo(Service, { as: 'receiver_service', foreignKey: { name: 'receiver_service_id', allowNull: false }, onDelete: 'CASCADE' });
