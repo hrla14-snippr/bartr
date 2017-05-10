@@ -49,6 +49,46 @@ router.get('/find', (req, res) => {
       })
 });
 
+router.get('/value', (req, res) => {
+  // /value?service=someService&authId=auth0_id
+  db.Service
+    .findOne({
+      where: {
+        type: req.query.service
+      }
+    })
+    .then(service => 
+      db.ServiceValue
+        .findOne({ where: { serviceId: service.id }}))
+    .then(data => res.json(data));
+});
+
+router.post('/value', (req, res) => {
+  // req.body = { authId, serviceType }
+  const userId;
+  db.User.findOne({
+    where: {
+      auth0_id: req.body.authId
+    }
+  })
+    .then(({ id }) => {
+      userId = id;
+      return db.Service.findOne({
+        where: {
+          type: req.body.serviceType
+        }
+      });
+    })
+    .then(service => db.ServiceValue.findOrCreate({
+      where: { userId, serviceId: service.id }
+    }))
+    .spread((serviceValue, created) => res.json({ serviceValue, created }));
+})
+
+router.get('/adjustedValue', (req, res) => {
+  // /adjustedValue?service=someService
+})
+
 router.post('/', (req, res, next) => {
   db.Service.findOne({
     where:{
