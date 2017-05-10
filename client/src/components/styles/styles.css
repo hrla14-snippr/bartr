@@ -326,3 +326,9 @@ h2.title {
   height: absolute;
   margin: 0 auto !important;
 }
+
+.calendar{
+  background: white;
+  height: auto;
+  width: 100%;
+}

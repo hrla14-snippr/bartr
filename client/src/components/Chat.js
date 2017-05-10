@@ -6,6 +6,13 @@ import { bindActionCreators } from 'redux';
 import * as authActions from '../actions/Auth0Actions'
 import * as authSelectors from '../auth/Auth0Selectors'
 import { connect } from 'react-redux';
+import moment from 'moment';
+
+import BigCalendar from 'react-big-calendar';
+
+BigCalendar.momentLocalizer(moment);
+
+import 'react-big-calendar/lib/css/react-big-calendar.css';
 
 class Chat extends React.Component {
   constructor(props) {
@@ -71,6 +78,12 @@ class Chat extends React.Component {
             <Form.Field onClick={this.changeId} onChange={this.handleIdAndMessage}  control={TextArea} label='Chat!' placeholder='Send em a message'  />
             <Form.Field control={Button}>Submit</Form.Field>
           </Form>
+          <div className="calendar">
+            <BigCalendar
+              style={{height: '420px'}}
+              events={[]}
+            />
+          </div>
         </div>
       )
   }
