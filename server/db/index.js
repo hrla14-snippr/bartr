@@ -96,8 +96,24 @@ const Service = sql.define('service', {
   }
 });
 
+const Schedule = sql.define('schedule', {
+  day: {
+    type: Sequelize.DATE,
+    allowNull: false
+  },
+	hour: {
+    type: Sequelize.TIME,
+    allowNull: false
+	}
+});
+
+
+
 User.belongsTo(Service);
 Service.hasMany(User);
+
+User.hasMany(Schedule);
+Schedule.hasMany(User);
 
 Engagement.belongsTo(User,  { as: 'sender', foreignKey: { name: 'sender_id', allowNull: false }, onDelete: 'CASCADE' });
 Engagement.belongsTo(User, { as: 'receiver', foreignKey: { name: 'receiver_id', allowNull: false }, onDelete: 'CASCADE' });
