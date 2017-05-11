@@ -6,6 +6,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "compile": "webpack -d -w",
+    "viewdb": "sqlite3 server/db/bartr.sqlite3",
     "hotstart": "webpack-dev-server",
     "heroku-postbuild": "webpack --config ./webpack.config.prod.js --progress --colors"
   },
