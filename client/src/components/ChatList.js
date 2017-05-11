@@ -5,7 +5,7 @@ import './styles/styles.css';
 
 const ChatList = (props) => {
   return (
-    <div className="chatlistentry" >
+    <div className="chatlistentry msglist" >
       {props.messages.map((message, index) => 
         <ChatListEntry message={message} key={index} index={index}/>
       )}
