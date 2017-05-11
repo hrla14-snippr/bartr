@@ -73,11 +73,10 @@ router.post('/value', (req, res) => {
       userId = id;
       return db.Service.findOne({ where: { type: req.body.serviceType } });
     })
-    .then(service => db.ServiceValue.findOrCreate({
-      where: { user_id: userId, service_id: service.id },
-      defaults: { value: parseFloat(req.body.value.toFixed(2)) }
-    }))
-    .spread((serviceValue, created) => res.json({ serviceValue, created }))
+    .then(service => 
+      db.ServiceValue
+        .upsert({ user_id: userId, service_id: service.id, value: parseFloat(req.body.value) }))
+    .then(() => res.send('Successfully inserted or updated user\'s service value'))
     .catch(e => console.log('Network Error: POST /api/services/value', e));
 })
 
@@ -101,6 +100,8 @@ router.post('/', (req, res, next) => {
             console.log('POST REQ for Services successful: ', data);
           })
           .catch(next);
+      } else {
+        res.send('Service already exists. No action taken.')
       }
     })
     .catch(next);
