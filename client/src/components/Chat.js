@@ -75,7 +75,13 @@ class Chat extends React.Component {
       headers: {'Authorization': 'Bearer ' + localStorage.getItem('id_token'),
         'Content-Type': 'application/json' }
     };
-    axios.post('/api/schedules', {start: sched.start, end: sched.end, user_id: this.state.engagementId }, config);
+    axios.post(`${API_ENDPOINT}/api/schedules`, {start: sched.start, end: sched.end, user_id: this.state.engagementId }, config)
+      .then((res) => {
+        console.log(res,'response from posting appointment');
+      })
+      .catch((err) => {
+        console.log(err, 'error from posting appointment');
+      })
   }
   seeSchedule() {
     this.setState({engagementId: this.props.id}, () => {
