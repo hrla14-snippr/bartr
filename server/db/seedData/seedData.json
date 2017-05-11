@@ -23,7 +23,8 @@
       "auth0_id": "auth0|590914e09d6860661e3fb7fb",
       "address": "1128 Irolo St, Los Angeles, CA 90006",
       "geo_lat": 34.050274,
-      "geo_long":  -118.300763
+      "geo_long":  -118.300763,
+      "service_provider_average_rating": 0
     }
   },
   {
@@ -37,7 +38,6 @@
       "address": "970 S Gramercy Pl",
       "geo_lat": 34.053739,
       "geo_long":  -118.312972,
-      "customer_average_rating": 0,
       "service_provider_average_rating": 0
     }
   },
@@ -52,7 +52,6 @@
       "address": "2634 W 17th St, Los Angeles, CA 90019",
       "geo_lat": 34.041782,
       "geo_long":  -118.318982,
-      "customer_average_rating": 0,
       "service_provider_average_rating": 0
     }
   },
@@ -66,7 +65,8 @@
       "auth0_id": "auth0|59092cb89d6860661e3fbaa7",
       "address": "345 S Oxford Ave, Los Angeles, CA 90020",
       "geo_lat": 34.067745,
-      "geo_long":  -118.308225
+      "geo_long":  -118.308225,
+      "service_provider_average_rating": 0
     }
   },
   {
@@ -80,7 +80,6 @@
       "address": "1142 S Diamond Bar Blvd, Diamond Bar, CA 91765",
       "geo_lat": 34.001745,
       "geo_long":  -117.809078,
-      "customer_average_rating": 0,
       "service_provider_average_rating": 0
     }
   }
