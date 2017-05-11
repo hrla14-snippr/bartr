@@ -83,10 +83,6 @@ const User = sql.define('user', {
 			allowNull: false,
       unique: true
 		},
-		customer_average_rating: {
-			type: Sequelize.INTEGER,
-			allowNull: true
-		},
 		service_provider_average_rating: {
 			type: Sequelize.INTEGER,
 			allowNull: true
