@@ -67,9 +67,29 @@ router.post('/', (req, res, next) => {
         console.log("");
         console.log("");
 
+        var counter = 0;
+        var accumulatedScore = 0;
+
         data.forEach(instance => {
           console.log("the score is ", instance.dataValues.score);
+
+          accumulatedScore += instance.dataValues.score;
+          counter++;
+
+          
         });
+
+        var averageReviewScore = Math.round(accumulatedScore / counter);
+
+        console.log(`The averageReviewScore is ${averageReviewScore}`);
+
+        User.find({
+          where: {id: subjOfReview}
+        }).then(data=>{
+          console.log("the user who's rating we'll update is ", data);
+          //service_provider_average_rating
+
+        });        
 
       })
 
@@ -79,147 +99,3 @@ router.post('/', (req, res, next) => {
 });
 
 module.exports = router;
-
-
-
-/*
-Need:
-
-
-
-the data inside api/reviews.js is  Instance {
-  dataValues:
-   { id: 5,
-     engagement_id: 4,
-     score: 5,
-     review: 'Mariano gave me a great cut!',
-     sender_id: 7,
-     receiver_id: 1,
-     updated_at: 2017-05-11T14:58:02.236Z,
-     created_at: 2017-05-11T14:58:02.236Z },
-  _previousDataValues:
-   { engagement_id: 4,
-     score: 5,
-     review: 'Mariano gave me a great cut!',
-     sender_id: 7,
-     receiver_id: 1,
-     id: 5,
-     created_at: 2017-05-11T14:58:02.236Z,
-     updated_at: 2017-05-11T14:58:02.236Z },
-  _changed:
-   { engagement_id: false,
-     score: false,
-     review: false,
-     sender_id: false,
-     receiver_id: false,
-     id: false,
-     created_at: false,
-     updated_at: false },
-  '$modelOptions':
-   { timestamps: true,
-     instanceMethods: {},
-     classMethods: {},
-     validate: {},
-     freezeTableName: false,
-     underscored: true,
-     underscoredAll: false,
-     paranoid: false,
-     rejectOnEmpty: false,
-     whereCollection: null,
-     schema: null,
-     schemaDelimiter: '',
-     defaultScope: {},
-     scopes: [],
-     hooks: {},
-     indexes: [],
-     name: { plural: 'reviews', singular: 'review' },
-     omitNul: false,
-     sequelize:
-      Sequelize {
-        options: [Object],
-        config: [Object],
-        dialect: [Object],
-        models: [Object],
-        modelManager: [Object],
-        connectionManager: [Object],
-        importCache: {},
-        test: [Object],
-        queryInterface: [Object] },
-     uniqueKeys: {},
-     hasPrimaryKeys: true },
-  '$options':
-   { isNewRecord: true,
-     '$schema': null,
-     '$schemaDelimiter': '',
-     attributes: undefined,
-     include: undefined,
-     raw: undefined,
-     silent: undefined },
-  hasPrimaryKeys: true,
-  __eagerlyLoadedAssociations: [],
-  isNewRecord: false }
-
-
-
-//////////////////////////////////////
-/ Review data 
-//////////////////////////////////////
-
-
-got the reviews for 1 [ Instance {
-    dataValues:
-     { id: 5,
-       score: 5,
-       review: 'Mariano gave me a great cut.',
-       created_at: 2017-05-11T17:20:10.658Z,
-       updated_at: 2017-05-11T17:20:10.658Z,
-       engagement_id: 4,
-       sender_id: 6,
-       receiver_id: 1 },
-    _previousDataValues:
-     { id: 5,
-       score: 5,
-       review: 'Mariano gave me a great cut.',
-       created_at: 2017-05-11T17:20:10.658Z,
-       updated_at: 2017-05-11T17:20:10.658Z,
-       engagement_id: 4,
-       sender_id: 6,
-       receiver_id: 1 },
-    _changed: {},
-    '$modelOptions':
-     { timestamps: true,
-       instanceMethods: {},
-       classMethods: {},
-       validate: {},
-       freezeTableName: false,
-       underscored: true,
-       underscoredAll: false,
-       paranoid: false,
-       rejectOnEmpty: false,
-       whereCollection: [Object],
-       schema: null,
-       schemaDelimiter: '',
-       defaultScope: {},
-       scopes: [],
-       hooks: {},
-       indexes: [],
-       name: [Object],
-       omitNul: false,
-       sequelize: [Object],
-       uniqueKeys: {},
-       hasPrimaryKeys: true },
-    '$options':
-     { isNewRecord: false,
-       '$schema': null,
-       '$schemaDelimiter': '',
-       raw: true,
-       attributes: [Object] },
-    hasPrimaryKeys: true,
-    __eagerlyLoadedAssociations: [],
-    isNewRecord: false } ]
-
-
-
-
-
-*/

@@ -7,7 +7,7 @@ yarn.lock
 .DS_Store
 
 #project specific
-.sqlite3
+*.sqlite3
 bundle.js
 #user specific
 #shak
