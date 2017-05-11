@@ -121,6 +121,11 @@ const ServiceValue = sql.define('service_value', {
 	value: {
 		type: Sequelize.FLOAT,
 		allowNull: false
+	},
+	user_id: {
+		type: Sequelize.INTEGER,
+		unique: true,
+		primaryKey: true
 	}
 });
 
