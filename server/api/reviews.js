@@ -49,53 +49,41 @@ router.post('/', (req, res, next) => {
     })
     .then(data => {
       
-      var reviewer = data.dataValues.sender_id;
-
-      //when a review gets posted, you really care about
-      //the person who we're reviewing & the score they were 
-      //given for their services rendered
+      //receiver_id is the person being reviewed
       var subjOfReview = data.dataValues.receiver_id;
       var reviewerRating = data.dataValues.score;
 
+
+      //Get all the reviews for that person
       Review.findAll({
         where: {
           receiver_id: subjOfReview
         }
       }).then(data=> {
-        //data is an array of Instances
-        console.log(`got the reviews for ${subjOfReview}`, data);
-        console.log("");
-        console.log("");
 
         var counter = 0;
         var accumulatedScore = 0;
 
+        //Count the total score from all reviews
         data.forEach(instance => {
           console.log("the score is ", instance.dataValues.score);
 
           accumulatedScore += instance.dataValues.score;
-          counter++;
-
-          
+          counter++;          
         });
-
+        
         var averageReviewScore = Math.round(accumulatedScore / counter);
+        var newScore = { service_provider_average_rating: averageReviewScore };
 
-        console.log(`The averageReviewScore is ${averageReviewScore}`);
-
-        User.find({
-          where: {id: subjOfReview}
-        }).then(data=>{
-          console.log("the user who's rating we'll update is ", data);
-          //service_provider_average_rating
-
-        });        
-
-      })
+        User.update(newScore, {where: { id: subjOfReview} })
+          .then(updatedUser =>{
+            console.log(`The updated user is ${updatedUser}`);
+          }); 
+      });
 
       console.log('Review POST Successful');
       res.status(200).send(data);
-    })
+    });
 });
 
 module.exports = router;
