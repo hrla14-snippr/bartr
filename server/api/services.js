@@ -51,38 +51,34 @@ router.get('/find', (req, res) => {
 
 router.get('/value', (req, res) => {
   // /value?service=someService&authId=auth0_id
-  db.Service
-    .findOne({
-      where: {
-        type: req.query.service
-      }
+  let userId;
+  db.User
+    .findOne({ where: { auth0_id: req.query.authId } })
+    .then((user) => {
+      userId = user.id;
+      return db.Service.findOne({ where: { type: req.query.service } });
     })
     .then(service => 
       db.ServiceValue
-        .findOne({ where: { serviceId: service.id }}))
-    .then(data => res.json(data));
+        .findOne({ where: { service_id: service.id, user_id: userId }}))
+        .then(data => res.json(data))
+    .catch(e => console.log('Network Error: GET /api/services/value', e));
 });
 
 router.post('/value', (req, res) => {
-  // req.body = { authId, serviceType }
-  const userId;
-  db.User.findOne({
-    where: {
-      auth0_id: req.body.authId
-    }
-  })
+  // req.body = { authId, serviceType, value }
+  let userId;
+  db.User.findOne({ where: { auth0_id: req.body.authId } })
     .then(({ id }) => {
       userId = id;
-      return db.Service.findOne({
-        where: {
-          type: req.body.serviceType
-        }
-      });
+      return db.Service.findOne({ where: { type: req.body.serviceType } });
     })
     .then(service => db.ServiceValue.findOrCreate({
-      where: { userId, serviceId: service.id }
+      where: { user_id: userId, service_id: service.id },
+      defaults: { value: parseFloat(req.body.value.toFixed(2)) }
     }))
-    .spread((serviceValue, created) => res.json({ serviceValue, created }));
+    .spread((serviceValue, created) => res.json({ serviceValue, created }))
+    .catch(e => console.log('Network Error: POST /api/services/value', e));
 })
 
 router.get('/adjustedValue', (req, res) => {
