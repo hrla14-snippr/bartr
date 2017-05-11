@@ -228,7 +228,6 @@ class EditProfile extends React.Component {
           <Input placeholder='Address' style={{ display: 'inline-block' }} >
             <Autocomplete
               style={{width: '400px', height: '25px', fontSize: '20px'}}
-              value={this.state.userInfo.address}
               onChange={(e) => {this.addressChange(e, null)}}
               onPlaceSelected={(place) => {
                 console.log(place);

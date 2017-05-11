@@ -158,7 +158,8 @@ const ServiceTransaction = sql.define('service_transaction', {
 User.belongsTo(Service);
 Service.hasMany(User);
 User.hasOne(ServiceValue);
-Service.hasOne(ServiceValue);
+ServiceValue.belongsTo(Service);
+Service.hasMany(ServiceValue);
 ServiceValue.belongsTo(AdjustedServiceValue);
 AdjustedServiceValue.hasMany(ServiceValue);
 
