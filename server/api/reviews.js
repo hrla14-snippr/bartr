@@ -30,6 +30,8 @@ const Engagement = db.Engagement;
 const User = db.User;
 const Message = db.Message;
 
+const Review = db.Review;
+
 const findAuth0User = require('./util').findAuth0User;
 
 router.post('/', (req, res, next) => {
@@ -48,13 +50,28 @@ router.post('/', (req, res, next) => {
     .then(data => {
       
       var reviewer = data.dataValues.sender_id;
+
+      //when a review gets posted, you really care about
+      //the person who we're reviewing & the score they were 
+      //given for their services rendered
       var subjOfReview = data.dataValues.receiver_id;
       var reviewerRating = data.dataValues.score;
 
-      //perform some DB querey to 
-      //- get subjOfReview's average score
-      //- compute never average score 
-        
+      Review.findAll({
+        where: {
+          receiver_id: subjOfReview
+        }
+      }).then(data=> {
+        //data is an array of Instances
+        console.log(`got the reviews for ${subjOfReview}`, data);
+        console.log("");
+        console.log("");
+
+        data.forEach(instance => {
+          console.log("the score is ", instance.dataValues.score);
+        });
+
+      })
 
       console.log('Review POST Successful');
       res.status(200).send(data);
@@ -141,6 +158,67 @@ the data inside api/reviews.js is  Instance {
   hasPrimaryKeys: true,
   __eagerlyLoadedAssociations: [],
   isNewRecord: false }
+
+
+
+//////////////////////////////////////
+/ Review data 
+//////////////////////////////////////
+
+
+got the reviews for 1 [ Instance {
+    dataValues:
+     { id: 5,
+       score: 5,
+       review: 'Mariano gave me a great cut.',
+       created_at: 2017-05-11T17:20:10.658Z,
+       updated_at: 2017-05-11T17:20:10.658Z,
+       engagement_id: 4,
+       sender_id: 6,
+       receiver_id: 1 },
+    _previousDataValues:
+     { id: 5,
+       score: 5,
+       review: 'Mariano gave me a great cut.',
+       created_at: 2017-05-11T17:20:10.658Z,
+       updated_at: 2017-05-11T17:20:10.658Z,
+       engagement_id: 4,
+       sender_id: 6,
+       receiver_id: 1 },
+    _changed: {},
+    '$modelOptions':
+     { timestamps: true,
+       instanceMethods: {},
+       classMethods: {},
+       validate: {},
+       freezeTableName: false,
+       underscored: true,
+       underscoredAll: false,
+       paranoid: false,
+       rejectOnEmpty: false,
+       whereCollection: [Object],
+       schema: null,
+       schemaDelimiter: '',
+       defaultScope: {},
+       scopes: [],
+       hooks: {},
+       indexes: [],
+       name: [Object],
+       omitNul: false,
+       sequelize: [Object],
+       uniqueKeys: {},
+       hasPrimaryKeys: true },
+    '$options':
+     { isNewRecord: false,
+       '$schema': null,
+       '$schemaDelimiter': '',
+       raw: true,
+       attributes: [Object] },
+    hasPrimaryKeys: true,
+    __eagerlyLoadedAssociations: [],
+    isNewRecord: false } ]
+
+
 
 
 

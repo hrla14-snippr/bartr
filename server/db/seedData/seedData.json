@@ -36,7 +36,9 @@
       "auth0_id": "auth0|590929df6a75e447a8cad216",
       "address": "970 S Gramercy Pl",
       "geo_lat": 34.053739,
-      "geo_long":  -118.312972
+      "geo_long":  -118.312972,
+      "customer_average_rating": 0,
+      "service_provider_average_rating": 0
     }
   },
   {
@@ -49,7 +51,9 @@
       "auth0_id": "auth0|59092cb09d6860661e3fbaa6",
       "address": "2634 W 17th St, Los Angeles, CA 90019",
       "geo_lat": 34.041782,
-      "geo_long":  -118.318982
+      "geo_long":  -118.318982,
+      "customer_average_rating": 0,
+      "service_provider_average_rating": 0
     }
   },
   {
@@ -75,7 +79,9 @@
       "auth0_id": "auth0|5909471d3614eb59f2bbcb7a",
       "address": "1142 S Diamond Bar Blvd, Diamond Bar, CA 91765",
       "geo_lat": 34.001745,
-      "geo_long":  -117.809078
+      "geo_long":  -117.809078,
+      "customer_average_rating": 0,
+      "service_provider_average_rating": 0
     }
   }
 ]
