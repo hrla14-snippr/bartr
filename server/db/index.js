@@ -131,6 +131,11 @@ const ServiceTransaction = sql.define('service_transaction', {
 	receiver_svc_currval: {
 		type: Sequelize.INTEGER,
 		allowNull: false
+	},
+	accepted: {
+		type: Sequelize.BOOLEAN,
+		allowNull: false,
+		defaultValue: false
 	}
 })
 
