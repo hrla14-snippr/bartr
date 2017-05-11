@@ -57,6 +57,9 @@ class UserProfile extends React.Component {
     }
     axios.get(API_ENDPOINT + `/api/users/${auth}`, config)
       .then((res) => {
+        
+        console.log("the response inside axios.get of UserProfile is ", res);
+
         let userService = null;
         _.each(this.state.listOfServices, (service) => {
           if (service.value === res.data.service_id) {
@@ -68,7 +71,8 @@ class UserProfile extends React.Component {
           address: res.data.address,
           service: userService,
           lat: res.data.geo_lat,
-          lng: res.data.geo_long
+          lng: res.data.geo_long,
+          avgRating: res.data.service_provider_average_rating,
         })
         this.loadMap();
       })
@@ -124,6 +128,7 @@ class UserProfile extends React.Component {
             <div className="user-profile-info">
               <h1 className="name">{this.state.name}</h1>
               <p className="service">{this.state.service ? this.state.service : null}</p>
+              <p><span className="address">Average Service Provider Rating:</span><span className="service">{this.state.avgRating === null ? 0 : this.state.avgRating}</span></p>
             </div> 
             <div className="address">{this.state.address ? this.state.address : null}</div>
             <Link to='/editprofile'><button>Edit Profile</button></Link>
