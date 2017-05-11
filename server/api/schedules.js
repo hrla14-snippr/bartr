@@ -8,26 +8,28 @@ const Schedule = db.Schedule;
 
 
 router.get('/', (req,res) => {
-  db.Schedule.findAll({where: {
+  Schedule.findAll({where: {
     id: req.body.engagementId,
   }})
-    .then((response) => {
-      res.send(response)
+    .then((data) => {
+    console.log('correct response ', data);
+      res.status(202).send(data)
     })
     .catch((err) => {
-      res.send('something went wrong fetching appointments ', err);
+    console.log('there was an error ', err);
+      res.status(403).send('something went wrong fetching appointments ', err);
     })
 });
 
 router.post('/', (req,res) => {
-  db.Schedule.create({start: req.body.start, end: req.body.end, user_id: req.body.user_id})
-    .then((sched) => {
-      res.send(sched.get({
-        plain: true
-      }));
+  Schedule.create({start: req.body.start, end: req.body.end, user_id: req.body.user_id})
+    .then((data) => {
+      console.log('this is the data from schedules ', data);
+      res.status(202).send(data)
     })
     .catch((err) => {
-      res.send('there was an error posting your appointment ', err);
+    console.log(err, 'there was an error');
+      res.status(403).send('there was an error posting your appointment ', err);
     });
 });
 
