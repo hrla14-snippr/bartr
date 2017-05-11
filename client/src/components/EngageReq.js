@@ -48,6 +48,7 @@ class EngageReq extends React.Component {
     this.setState({messages: msgs})
   }
 
+//////////// takes out completed engagement from the currentengagement state///////////////
   fetchEngagements(eng) {
     let completed;
     _.each(this.state.currentEngagement, (engagements, index) => {
@@ -64,7 +65,7 @@ class EngageReq extends React.Component {
   }
 
   render() {
-    console.log(this.state , 'this is the mfuckin engagereqlist')
+    console.log('ENGAGE REQ', this.state)
     return(
       <div >
         <h2  className="title" style={{fontFamily: 'Ubuntu', fontWeight: "normal"}} >Current Engagements </h2>

@@ -18,6 +18,7 @@ if (process.env.NODE_ENV === 'development') {
 app.use(morgan());
 // app.use(expressSession({secret: 'bigboost'}));
 app.use(bodyParser.json());
+app.use(bodyParser.urlencoded());
 app.use(express.static(path.join(__dirname, '../client/static')));
 
 const router = require('./router');

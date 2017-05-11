@@ -49,6 +49,46 @@ router.get('/find', (req, res) => {
       })
 });
 
+router.get('/value', (req, res) => {
+  // /value?service=someService&authId=auth0_id
+  let userId;
+  db.User
+    .findOne({ where: { auth0_id: req.query.authId } })
+    .then((user) => {
+      userId = user.id;
+      return db.Service.findOne({ where: { type: req.query.service } });
+    })
+    .then(service => 
+      db.ServiceValue
+        .findOne({ where: { service_id: service.id, user_id: userId }}))
+        .then(data => res.json(data))
+    .catch(e => console.log('Network Error: GET /api/services/value', e));
+});
+
+router.post('/value', (req, res) => {
+  // req.body = { authId, serviceType, value }
+  let userId;
+  db.User.findOne({ where: { auth0_id: req.body.authId } })
+    .then(({ id }) => {
+      userId = id;
+      return db.Service.findOne({ where: { type: req.body.serviceType } });
+    })
+    .then(service => 
+      db.ServiceValue
+        .upsert({ user_id: userId, service_id: service.id, value: req.body.value }))
+    .then(() => res.send('Successfully inserted or updated user\'s service value'))
+    .catch(e => console.log('Network Error: POST /api/services/value', e));
+})
+
+router.get('/adjustedValue', (req, res) => {
+  // /adjustedValue?service=someService
+})
+
+router.put('/transaction', (req, res) => {
+  // db.ServiceTransaction
+  //   .upsert
+})
+
 router.post('/', (req, res, next) => {
   db.Service.findOne({
     where:{
@@ -65,6 +105,8 @@ router.post('/', (req, res, next) => {
             console.log('POST REQ for Services successful: ', data);
           })
           .catch(next);
+      } else {
+        res.send('Service already exists. No action taken.')
       }
     })
     .catch(next);
