@@ -75,7 +75,7 @@ router.post('/value', (req, res) => {
     })
     .then(service => 
       db.ServiceValue
-        .upsert({ user_id: userId, service_id: service.id, value: parseFloat(req.body.value) }))
+        .upsert({ user_id: userId, service_id: service.id, value: req.body.value }))
     .then(() => res.send('Successfully inserted or updated user\'s service value'))
     .catch(e => console.log('Network Error: POST /api/services/value', e));
 })

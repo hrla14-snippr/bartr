@@ -98,7 +98,7 @@ const Service = sql.define('service', {
 
 const ServiceValue = sql.define('service_value', {
 	value: {
-		type: Sequelize.FLOAT,
+		type: Sequelize.INTEGER,
 		allowNull: false
 	},
 	user_id: {
@@ -110,7 +110,7 @@ const ServiceValue = sql.define('service_value', {
 
 const AdjustedServiceValue = sql.define('adjusted_service_value', {
 	value: {
-		type: Sequelize.FLOAT,
+		type: Sequelize.INTEGER,
 		allowNull: false
 	}
 });
@@ -123,6 +123,14 @@ const ServiceTransaction = sql.define('service_transaction', {
 	receiver_svc_units: {
 		type: Sequelize.INTEGER,
 		allowNull: false,
+	},
+	sender_svc_currval: {
+		type: Sequelize.INTEGER,
+		allowNull: false
+	},
+	receiver_svc_currval: {
+		type: Sequelize.INTEGER,
+		allowNull: false
 	}
 })
 
