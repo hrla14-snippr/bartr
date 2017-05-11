@@ -84,6 +84,11 @@ router.get('/adjustedValue', (req, res) => {
   // /adjustedValue?service=someService
 })
 
+router.put('/transaction', (req, res) => {
+  // db.ServiceTransaction
+  //   .upsert
+})
+
 router.post('/', (req, res, next) => {
   db.Service.findOne({
     where:{
