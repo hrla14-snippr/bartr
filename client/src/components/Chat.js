@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Component } from 'react';
 import axios from "axios";
 import { Button, Form, TextArea } from 'semantic-ui-react'
 import ChatList from './ChatList';
@@ -7,12 +7,41 @@ import * as authActions from '../actions/Auth0Actions'
 import * as authSelectors from '../auth/Auth0Selectors'
 import { connect } from 'react-redux';
 import moment from 'moment';
+import Modal from 'react-modal';
 
 import BigCalendar from 'react-big-calendar';
 
 BigCalendar.momentLocalizer(moment);
 
 import 'react-big-calendar/lib/css/react-big-calendar.css';
+
+const customStyles = {
+  overlay: {
+    position: 'fixed',
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+    backgroundColor: 'rgba(0, 0, 0, 0.75)',
+  },
+  content: {
+    position: 'absolute',
+    top: '15%',
+    left: '10%',
+    border: 'none',
+    background: '#fff',
+    overflow: 'auto',
+    WebkitOverflowScrolling: 'touch',
+    borderRadius: '7px',
+    outline: 'none',
+    padding: '20px',
+    width: '80%',
+    height: '500px',
+    transition: '1s',
+    animation: 'bounce .40s',
+  },
+};
+
 
 
 
@@ -26,7 +55,9 @@ class Chat extends React.Component {
       engagementId: null,
       currentEvents: [],
       engId: null,
+      modalIsOpen: false,
     }
+
     this.changeId = this.changeId.bind(this);
     this.handleMessage = this.handleMessage.bind(this);
     this.updateChatHistory = this.updateChatHistory.bind(this);
@@ -34,6 +65,8 @@ class Chat extends React.Component {
     this.seeSchedule = this.seeSchedule.bind(this);
     this.fetchSchedule = this.fetchSchedule.bind(this);
     this.momentDate = this.momentDate.bind(this);
+    this.openModal = this.openModal.bind(this);
+    this.closeModal = this.closeModal.bind(this);
   }
 
   changeId(){
@@ -133,35 +166,52 @@ class Chat extends React.Component {
         console.log(err, 'error from grabbing appointments');
       })
   }
+  openModal() {
+    this.setState({ modalIsOpen: true });
+  }
+  closeModal() {
+    this.setState({ modalIsOpen: false });
+  }
   render() {
     console.log(this.state, 'this is the state', this.props.id);
       return (
         <div className="chatbox">
-          <ChatList messages={this.props.messages}/>
-          <Form className="msgport" onSubmit={this.updateChatHistory} >
-            <Form.Field onClick={this.changeId} onChange={this.handleIdAndMessage}  control={TextArea} label='Chat!' placeholder='Send em a message'  />
-            <Form.Field control={Button}>Submit</Form.Field>
-            <Form.Field onClick={this.seeSchedule} control={Button}>See service providers schedule</Form.Field>
-          </Form>
-          <div className={this.state.engId ? 'calendar' : 'hidden'  }>
-            <BigCalendar
-              selectable
-              events={this.state.currentEvents}
-              defaultView='day'
-              scrollToTime={new Date()}
-              defaultDate={new Date()}
-              onSelectEvent={event => alert(event.title)}
-              onSelectSlot={(slotInfo) => {
+          <Modal
+            isOpen={this.state.modalIsOpen}
+            onRequestClose={this.closeModal}
+            style={customStyles}
+            contentLabel="Example Modal"
+          >
+            <div className='calendar'>
+              <BigCalendar
+                selectable
+                events={this.state.currentEvents}
+                defaultView='day'
+                scrollToTime={new Date()}
+                defaultDate={new Date()}
+                onSelectEvent={event => alert(event.title)}
+                onSelectSlot={(slotInfo) => {
                   alert(
                     `selected slot: \n\nstart ${slotInfo.start.toLocaleString()} ` +
-                    `\nend: ${slotInfo.end.toLocaleString()}`)
+                    `\nend: ${slotInfo.end.toLocaleString()}`);
                   console.log('this is the slot info obj ', slotInfo);
                   console.log('this is the engagement id ', this.state.engId);
                   this.postAppointments(slotInfo);
                 }
-              }
-            />
-          </div>
+                }
+              />
+            </div>
+          </Modal>
+          <ChatList messages={this.props.messages}/>
+          <Form className="msgport" onSubmit={this.updateChatHistory} >
+            <Form.Field onClick={() => {
+              this.changeId();
+              this.seeSchedule();
+              this.openModal();
+            }} control={Button}>See service providers schedule</Form.Field>
+            <Form.Field onClick={this.changeId} onChange={this.handleIdAndMessage}  control={TextArea} label='Chat!' placeholder='Send em a message'  />
+            <Form.Field control={Button}>Submit</Form.Field>
+          </Form>
         </div>
       )
   }
