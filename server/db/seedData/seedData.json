@@ -58,14 +58,6 @@
     }
   },
   {
-    "model": "ServiceValue",
-    "data": {
-      "value": 5,
-      "user_id": 2,
-      "service_id": 1
-    }
-  },
-  {
     "model": "User",
     "data": {
       "id": 3,
@@ -78,14 +70,6 @@
       "geo_long":  -118.318982,
       "customer_average_rating": 0,
       "service_provider_average_rating": 0
-    }
-  },
-  {
-    "model": "ServiceValue",
-    "data": {
-      "value": 4,
-      "user_id": 3,
-      "service_id": 2
     }
   },
   {
@@ -141,10 +125,25 @@
     }
   },
   {
+    "model": "User",
+    "data": {
+      "id": 6,
+      "email": "snypprtest@gmail.com",
+      "name": "John Doe",
+      "service_id": 2,
+      "auth0_id": "auth0|59135a784baa935a253ddd9f",
+      "address": "6060 Center Drive, Los Angeles, CA, United States",
+      "geo_lat": 33.9760019,
+      "geo_long":  -117.809078,
+      "customer_average_rating": 0,
+      "service_provider_average_rating": 0
+    }
+  },
+  {
     "model": "ServiceValue",
     "data": {
-      "value": 6,
-      "user_id": 5,
+      "value": 3,
+      "user_id": 6,
       "service_id": 2
     }
   }

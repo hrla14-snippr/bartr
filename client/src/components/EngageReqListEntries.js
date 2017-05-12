@@ -33,6 +33,8 @@ const EngageReqListEntries = (props) => {
     } else {
       axios.put(`${API_ENDPOINT}/api/services/transaction`, {
         sender_svc_units: senderUnits,
+        sender_val: currentEngagement.sender.service_value.value,
+        receiver_val: currentEngagement.receiver.service_value.value,
         receiver_svc_units: receiverUnits,
         engagement_id: selectedEngagement.id
       }, config)
@@ -44,6 +46,7 @@ const EngageReqListEntries = (props) => {
             confirmButtonText: 'Please await a response from the other party.',
             type: 'success'
           })
+          props.forceRerender();
         })
         .catch((e) => console.log('Error updating bartr transaction', e));
       }

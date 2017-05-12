@@ -19,10 +19,15 @@ class EngageReq extends React.Component {
       this.fetchEngagements = this.fetchEngagements.bind(this);
       this.fetchCurrentId = this.fetchCurrentId.bind(this);
       this.fetchChatMessages = this.fetchChatMessages.bind(this);
+      this.forceRerender = this.forceRerender.bind(this);
   }
 
   componentDidMount () {
     this.fetchCurrentEngagement();
+  }
+
+  forceRerender() {
+    this.forceUpdate();
   }
 
   fetchCurrentEngagement() {
@@ -75,6 +80,7 @@ class EngageReq extends React.Component {
           currentEngagement={this.state.currentEngagement} 
           fetchEngagements={this.fetchEngagements}
           fetchId={this.fetchCurrentId} 
+          forceRerender={this.forceRerender}
           fetchMessages={this.fetchMessages}  />
         <Chat id={this.state.id} fetchChatMessages={this.fetchChatMessages} messages={this.state.messages} currentEngagement={this.state.currentEngagement} />
       </div>

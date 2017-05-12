@@ -4,8 +4,19 @@
     "data": {
       "id": 3,
       "sender_id": 2,
-      "receiver_id": 3,
-      "complete": "true"
+      "receiver_id": 6
+    }
+  },
+  {
+    "model": "ServiceTransaction",
+    "data": {
+      "engagement_id": 3,
+      "sender_svc_units": 4,
+      "receiver_svc_units": 3,
+      "sender_svc_currval": 5,
+      "receiver_svc_currval": 3,
+      "sender_service_id": 1,
+      "receiver_service_id": 2
     }
   },
   {

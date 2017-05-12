@@ -9,6 +9,19 @@
     }
   },
   {
+    "model": "ServiceTransaction",
+    "data": {
+      "engagement_id": 2,
+      "sender_svc_units": 3,
+      "receiver_svc_units": 2,
+      "sender_svc_currval": 5,
+      "receiver_svc_currval": 4,
+      "sender_service_id": 1,
+      "receiver_service_id": 2,
+      "accepted": true
+    }
+  },
+  {
     "model": "Message",
     "data": {
       "engagement_id": 2,
