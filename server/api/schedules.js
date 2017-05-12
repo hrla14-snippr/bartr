@@ -7,10 +7,16 @@ const Schedule = db.Schedule;
 
 
 
+
 router.get('/:id', (req,res) => {
   console.log('this is the persons id ', req.params.id);
   Schedule.findAll({where: {
     user_id: req.params.id,
+=======
+router.get('/', (req,res) => {
+  Schedule.findAll({where: {
+    id: req.body.engagementId,
+>>>>>>> 96b787b371a178fad1b3bf81bca23ff5edc6b07f
   }})
     .then((data) => {
     console.log('correct response ', data);
