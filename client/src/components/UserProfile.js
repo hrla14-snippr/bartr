@@ -16,7 +16,8 @@ class UserProfile extends React.Component {
       service: '',
       lat: '',
       lng: '',
-      listOfServices: [] 
+      listOfServices: [] ,
+      avgRating: null
     }
     
     this.fetchUser = this.fetchUser.bind(this);
