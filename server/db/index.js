@@ -125,21 +125,21 @@ const ServiceValue = sql.define('service_value', {
 	}
 });
 
-const AdjustedServiceValue = sql.define('adjusted_service_value', {
+const AverageASV = sql.define('average_asv', {
 	value: {
-		type: Sequelize.INTEGER,
+		type: Sequelize.FLOAT,
 		allowNull: false
-	}
+	},
 });
 
 const ServiceTransaction = sql.define('service_transaction', {
 	sender_svc_units: {
 		type: Sequelize.INTEGER,
-		allowNull: false
+		defaultValue: 0
 	}, 
 	receiver_svc_units: {
 		type: Sequelize.INTEGER,
-		allowNull: false,
+		defaultValue: 0,
 	},
 	sender_svc_currval: {
 		type: Sequelize.INTEGER,
@@ -147,6 +147,14 @@ const ServiceTransaction = sql.define('service_transaction', {
 	},
 	receiver_svc_currval: {
 		type: Sequelize.INTEGER,
+		allowNull: false
+	},
+	sender_asv: {
+		type: Sequelize.FLOAT,
+		allowNull: false
+	},
+	receiver_asv: {
+		type: Sequelize.FLOAT,
 		allowNull: false
 	},
 	accepted: {
@@ -161,18 +169,15 @@ Service.hasMany(User);
 User.hasOne(ServiceValue);
 ServiceValue.belongsTo(Service);
 Service.hasMany(ServiceValue);
-ServiceValue.belongsTo(AdjustedServiceValue);
-AdjustedServiceValue.hasMany(ServiceValue);
+AverageASV.belongsTo(Service);
+Service.hasMany(AverageASV);
 
 ServiceTransaction.belongsTo(Service, { as: 'sender_service', foreignKey: { name: 'sender_service_id', allowNull: false }, onDelete: 'CASCADE' });
 ServiceTransaction.belongsTo(Service, { as: 'receiver_service', foreignKey: { name: 'receiver_service_id', allowNull: false }, onDelete: 'CASCADE' });
-Service.hasMany(ServiceTransaction, { as: 'sender_transaction', foreignKey: 'sender_transaction_id'});
-Service.hasMany(ServiceTransaction, { as: 'receiver_transaction', foreignKey: 'receiver_transaction_id'});
+Service.hasMany(ServiceTransaction, { as: 'sender_transaction', foreignKey: 'sender_service_id'});
+Service.hasMany(ServiceTransaction, { as: 'receiver_transaction', foreignKey: 'receiver_service_id'});
 
-ServiceTransaction.belongsTo(Engagement, { as: 'sent_engagement', foreignKey: { name: 'sent_engagement_id', allowNull: false }, onDelete: 'CASCADE' });
-ServiceTransaction.belongsTo(Engagement, { as: 'received_engagement', foreignKey: { name: 'received_engagement_id', allowNull: false }, onDelete: 'CASCADE' });
-Engagement.hasMany(ServiceTransaction, { as: 'sender_transaction', foreignKey: 'sender_transaction_id'});
-Engagement.hasMany(ServiceTransaction, { as: 'receiver_transaction', foreignKey: 'receiver_transaction_id'});
+Engagement.hasOne(ServiceTransaction);
 
 User.hasMany(Schedule);
 Schedule.belongsTo(User);
@@ -199,7 +204,7 @@ User.hasMany(Review, { as: 'received_reviews',foreignKey: 'receiver_id'});
 module.exports.User = User;
 module.exports.Service = Service;
 module.exports.ServiceValue = ServiceValue;
-module.exports.AdjustedServiceValue = AdjustedServiceValue;
+module.exports.AverageASV = AverageASV;
 module.exports.ServiceTransaction = ServiceTransaction;
 module.exports.Review = Review;
 module.exports.Message = Message;
