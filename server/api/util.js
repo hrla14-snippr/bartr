@@ -7,7 +7,9 @@ const Engagement = db.Engagement;
 const User = db.User;
 const Message = db.Message;
 
-
+exports.calcAvgASV = (sideUnits, sideValue, targetUnits) => {
+  return parseFloat(((sideUnits * sideValue) / targetUnits).toFixed(3))
+}
 
 var getBoundingBox = function (centerPoint, distance) {
   /**
