@@ -18,6 +18,8 @@
       "receiver_svc_currval": 4,
       "sender_service_id": 1,
       "receiver_service_id": 2,
+      "sender_asv": 3,
+      "receiver_asv": 2.667,
       "accepted": true
     }
   },

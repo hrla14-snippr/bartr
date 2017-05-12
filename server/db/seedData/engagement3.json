@@ -16,7 +16,9 @@
       "sender_svc_currval": 5,
       "receiver_svc_currval": 3,
       "sender_service_id": 1,
-      "receiver_service_id": 2
+      "receiver_service_id": 2,
+      "sender_asv": 2.25,
+      "receiver_asv": 6.667
     }
   },
   {
