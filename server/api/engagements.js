@@ -3,6 +3,7 @@
 const Sequelize = require('sequelize');
 const router = require('express').Router();
 const db = require('../db');
+const _ = require('lodash');
 
 const Engagement = db.Engagement;
 const User = db.User;
@@ -18,6 +19,7 @@ router.get('/', (req, res, next) => {
         where:{ $or: [{sender_id: user.id}, {receiver_id: user.id}], complete: showComplete },
         include: [
           { model: db.Message },
+          db.ServiceTransaction,
           { model: db.User, as: 'sender', include: [db.Service, db.ServiceValue] },
           { model: db.User, as: 'receiver', include: [db.Service, db.ServiceValue] },
           { model: db.Review },
@@ -46,6 +48,7 @@ router.get('/:engagement_id', (req, res, next) => {
 });
 
 router.post('/', (req, res, next) => {
+  let engagement_id;
   findAuth0User(req)
   .then((user)=>{
     req.body['sender_id'] = user.id;
@@ -53,8 +56,32 @@ router.post('/', (req, res, next) => {
   })
   .then(data => {
     console.log('Engagement POST Request Sucessful')
-    res.status(201).json(data);
+    engagement_id = data.id;
+    return db.ServiceValue
+      .findAll({ where: {
+        $or: [{user_id: req.body.sender_id}, {user_id: req.body.receiver_id}]
+      } })
   })
+  .then(data => {
+    let senderValue;
+    let receiverValue;
+    _.each(data, ({ dataValues }) => {
+      if (dataValues.user_id === req.body.sender_id) {
+        senderValue = dataValues;
+      } else if (dataValues.user_id === req.body.receiver_id) {
+        receiverValue = dataValues;
+      }
+    });
+    return db.ServiceTransaction
+      .create({
+        engagement_id,
+        sender_svc_currval: senderValue.value,
+        receiver_svc_currval: receiverValue.value,
+        sender_service_id: senderValue.service_id,
+        receiver_service_id: receiverValue.service_id
+      })
+  })
+  .then(() => res.status(201).send('Created engagement and service transaction.'))
 })
 
 router.put('/:engagement_id', (req, res, next) => {

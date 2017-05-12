@@ -3,7 +3,8 @@ var gutil = require("gulp-util");
 const nodemon = require('gulp-nodemon');
 const Promise = require('bluebird');
 const sequelize_fixtures = require('sequelize-fixtures');
-const env = require('gulp-env');
+const env = require('gulp-env'); 
+const _ = require('lodash');
 const webpack = require ('webpack')
 const webpackDevConfig = require('./webpack.config.dev');
 const WebpackDevServer = require("webpack-dev-server");
@@ -20,7 +21,7 @@ const models = {
   'Service': db.Service,
   'Engagement': db.Engagement,
   'ServiceValue': db.ServiceValue,
-  'AdjustedServiceValue': db.AdjustedServiceValue,
+  'AverageASV': db.AverageASV,
   'ServiceTransaction': db.ServiceTransaction,
   'Review': db.Review,
   'Message': db.Message,
@@ -40,7 +41,7 @@ gulp.task('seed:wipe', function(cb){
         db.Message.sync({force: true}),
         db.Review.sync({force: true}),
         db.ServiceValue.sync({force: true}),
-        db.AdjustedServiceValue.sync({force: true}),
+        db.AverageASV.sync({force: true}),
         db.ServiceTransaction.sync({force: true})
       ])
     })
@@ -103,4 +104,39 @@ gulp.task("webpackhot", function(callback) {
   });
 });
 
-gulp.task('default', ['nodemon', 'watch', 'webpackhot']);
+gulp.task('calcworker', function(callback) {
+  let store = {};
+  let optionStore = [];
+  // setInterval(() => {
+    db.ServiceTransaction
+      .findAll({ where: { accepted: true } })
+      .then((data) => {
+        // iterate over datavalues and push ASVs into store OBJ. calc average after and bulkcreate actual ASV table. maybe change name of table
+        // populate store with adjustedservicetrans data
+        _.each(data, ({ dataValues }) => {
+          if (!store[dataValues.sender_service_id]) {
+            store[dataValues.sender_service_id] = [];
+          }
+          store[dataValues.sender_service_id].push(dataValues.sender_asv);
+          if (!store[dataValues.receiver_service_id]) {
+            store[dataValues.receiver_service_id] = [];
+          }
+          store[dataValues.receiver_service_id].push(dataValues.receiver_asv);
+        });
+        // calc avg value of each service found
+        _.each(store, (asv, key) => {
+          let avg = _.reduce(asv, (a, b) => a + b) / asv.length;
+          optionStore.push({
+            service_id: key,
+            value: avg
+          })
+        });
+        console.log('optionStore', optionStore)
+        // pass store into bulkcreate adjustedservicetrans
+        return db.AverageASV.bulkCreate(optionStore);
+      })
+      .then(data => console.log('Inserted new Average ASVs!'));
+  // }, 10000)
+});
+
+gulp.task('default', ['nodemon', 'watch', 'webpackhot', 'calcworker']);

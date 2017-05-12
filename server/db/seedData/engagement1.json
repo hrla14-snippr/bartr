@@ -4,7 +4,23 @@
     "data": {
       "id": 1,
       "sender_id": 1,
-      "receiver_id": 3
+      "receiver_id": 3,
+      "complete": true
+    }
+  },
+  {
+    "model": "ServiceTransaction",
+    "data": {
+      "engagement_id": 1,
+      "sender_svc_units": 4,
+      "receiver_svc_units": 3,
+      "sender_svc_currval": 2,
+      "receiver_svc_currval": 4,
+      "sender_service_id": 1,
+      "receiver_service_id": 2,
+      "sender_asv": 3,
+      "receiver_asv": 2.667,
+      "accepted": true
     }
   },
   {

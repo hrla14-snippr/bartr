@@ -4,6 +4,7 @@ const Sequelize = require('sequelize');
 const db = require('../db');
 const router = require('express').Router();
 
+const util = require('./util');
 const getBoundingBox = require('./util').getBoundingBox;
 
 router.get('/', (req, res) => {
@@ -85,8 +86,20 @@ router.get('/adjustedValue', (req, res) => {
 })
 
 router.put('/transaction', (req, res) => {
-  // db.ServiceTransaction
-  //   .upsert
+  // sender_val receiver_val
+
+  const options = {
+    sender_svc_units: req.body.sender_svc_units,
+    receiver_svc_units: req.body.receiver_svc_units,
+    sender_asv: util.calcAvgASV(req.body.receiver_svc_units, req.body.receiver_val, req.body.sender_svc_units),
+    receiver_asv: util.calcAvgASV(req.body.sender_svc_units, req.body.sender_val, req.body.receiver_svc_units)
+  };
+  if (req.body.accepted) {
+    options.accepted = req.body.accepted;
+  }
+  db.ServiceTransaction
+    .update(options, { where: { engagement_id: req.body.engagement_id } })
+    .then(data => res.json(data))
 })
 
 router.post('/', (req, res, next) => {
