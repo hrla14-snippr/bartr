@@ -98,7 +98,7 @@ class Chat extends React.Component {
     });
   }
   momentDate(date) {
-      const year = parseInt(date.substring(0,4));
+      const year = parseInt(date.substring(0,4)) -1;
       const month = parseInt(date.substring(5,7));
       const day = parseInt(date.substring(8,10))
       const hour = parseInt(date.substring(11,13))
@@ -106,6 +106,7 @@ class Chat extends React.Component {
       return new Date(year, month, day, hour, minute, 0)
   }
   fetchSchedule() {
+    console.log('fetch schedule is running');
     const config = {
       headers: {'Authorization': 'Bearer ' + localStorage.getItem('id_token'),
         'Content-Type': 'application/json' }
@@ -114,6 +115,7 @@ class Chat extends React.Component {
       .then((res) => {
         console.log(res.data,'response from grabbing appointments');
         const momentDates = res.data.map((date) => {
+          console.log('dates when fetch sched runs ', date);
           const event = {
             title: 'booked',
             start: this.momentDate(date.start),
@@ -143,7 +145,7 @@ class Chat extends React.Component {
               selectable
               events={this.state.currentEvents}
               defaultView='week'
-              scrollToTime={new Date(1970, 1, 1, 6)}
+              scrollToTime={new Date()}
               defaultDate={new Date()}
               onSelectEvent={event => alert(event.title)}
               onSelectSlot={(slotInfo) => {
