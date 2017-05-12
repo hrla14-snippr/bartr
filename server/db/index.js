@@ -133,6 +133,11 @@ const AdjustedServiceValue = sql.define('adjusted_service_value', {
 	value: {
 		type: Sequelize.INTEGER,
 		allowNull: false
+	},
+	service_id: {
+		type: Sequelize.INTEGER,
+		allowNull: false,
+		primaryKey: true
 	}
 });
 
@@ -165,6 +170,7 @@ Service.hasMany(User);
 User.hasOne(ServiceValue);
 ServiceValue.belongsTo(Service);
 Service.hasMany(ServiceValue);
+Service.hasOne(AdjustedServiceValue);
 ServiceValue.belongsTo(AdjustedServiceValue);
 AdjustedServiceValue.hasMany(ServiceValue);
 
