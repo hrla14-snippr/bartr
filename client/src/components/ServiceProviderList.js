@@ -42,7 +42,8 @@ const ServiceProviderList = (props) => {
               <Image src='http://images4.wikia.nocookie.net/marveldatabase/images/9/9b/Ultimate_spiderman.jpg' />
               <Card.Content>
                 <Card.Header>
-                  {user.name}
+                  {user.name}<br />
+                  Average Provider Rating: {user.service_provider_average_rating}
                 </Card.Header>
                 <Card.Description>
                   {user.service.type}
@@ -62,7 +63,8 @@ const ServiceProviderList = (props) => {
               <Image src='http://images4.wikia.nocookie.net/marveldatabase/images/9/9b/Ultimate_spiderman.jpg' />
               <Card.Content>
                 <Card.Header>
-                  {user.name}
+                  {user.name}<br />
+                  Average Provider Rating: {user.service_provider_average_rating}
                 </Card.Header>
                 <Card.Description>
                   {user.service.type}
