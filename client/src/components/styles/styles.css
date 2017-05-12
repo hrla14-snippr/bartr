@@ -338,13 +338,12 @@ h2.title {
 
 .calendar{
   position: absolute;
-  left: 15%;
+  left: 5%;
   background: white;
   height: 400px;
-  width: 70%;
+  width: 90%;
   overflow: auto;
-  margin-top: 25px;
-  top: 40%;
+  top: 10%;
 }
 
 .msglist{
