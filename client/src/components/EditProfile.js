@@ -22,14 +22,18 @@ class EditProfile extends React.Component {
         auth0_id: ''
       },
       service: null,
-      listOfServices: []
+      listOfServices: [],
+      serviceValue: null
     }
     this.getServices = this.getServices.bind(this);
     this.nameChange = this.nameChange.bind(this);
     this.addressChange = this.addressChange.bind(this);
     this.serviceChange = this.serviceChange.bind(this);
+    this.serviceValueChange = this.serviceValueChange.bind(this);
     this.newServiceChange = this.newServiceChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
+    this.renderCurrentValue = this.renderCurrentValue.bind(this);
+    this.renderCurrentService = this.renderCurrentService.bind(this);
   }
 
   componentDidMount() {
@@ -51,6 +55,9 @@ class EditProfile extends React.Component {
       }
     axios.get(API_ENDPOINT + `/api/users/${auth0_id}`, config)
       .then((res) => {
+        console.log(res.data);
+        const service = res.data.service ? res.data.service.type : null;
+        const serviceValue = res.data.service_value ? res.data.service_value.value : null;
         this.setState({
           userInfo: {...this.state.userInfo,
             name: res.data.name,
@@ -58,7 +65,9 @@ class EditProfile extends React.Component {
             geo_lat: res.data.geo_lat,
             geo_lng: res.data.geo_lng,
             service_id: res.data.service_id,
-          }
+          },
+          service,
+          serviceValue
         })
         console.log(res)
         console.log(this.state)
@@ -109,8 +118,14 @@ class EditProfile extends React.Component {
         type: this.state.service
       }, config)
         .then(res => {
-          console.log(res);
+          console.log('service res');
+          return axios.post(API_ENDPOINT + '/api/services/value', {
+            authId: this.state.userInfo.auth0_id,
+            serviceType: this.state.service,
+            value: this.state.serviceValue
+          }, config);
         })
+        .then(res => console.log('posted service value', res))
         .catch(err => {
           console.log('Error in Service POST: ', err);
         })
@@ -185,19 +200,32 @@ class EditProfile extends React.Component {
     console.log('STATE: ', this.state.userInfo);
   }
   
+  serviceValueChange(event, result) {
+    this.setState({ serviceValue: result.value });
+  }
+
+  renderCurrentValue() {
+    if (this.state.serviceValue) return <p>{`Your service's current value as perceived by you: ${this.state.serviceValue}`}</p>;
+  }
+
+  renderCurrentService() {
+    if (this.state.service) return <p>{`Your current service is: ${this.state.service}`}</p>
+  }
+
   render() {
     console.log('this.props in editprofile: ', this.props)
+    const serviceValues = _.range(1, 11).map((num) => ({ key: num, text: num, value: num }));
     return (
       <div style={{backgroundImage:'url(https://openclipart.org/download/221722/Cloud-Network.svg)', backgroundAttachment: 'fixed', backgroundSize: 'cover', backgroundRepeat: 'no-repeat', height: '100vh'}}>
       <Form style={{border: '.3em solid black', borderRadius: '3rem', marginTop: '8%', padding: '1em', display: 'inline-block', backgroundColor: 'white'}}>
         <Form.Field>
           <label style={{fontSize: '20px', color: 'black'}}>Name</label>
           <Input style={{ width: '400px', height: '25px', fontSize: '20px', marginBottom: '.5em'}}
-            placeholder='Name'
+            placeholder='Name' value={this.state.userInfo.name}
             onChange={(e) => {this.nameChange(e)}} />
           <br/>
           <label style={{fontSize: '20px', color: 'black'}}>Address</label>
-          <Input placeholder='Address' style={{ display: 'inline-block' }}>
+          <Input placeholder='Address' style={{ display: 'inline-block' }} >
             <Autocomplete
               style={{width: '400px', height: '25px', fontSize: '20px'}}
               onChange={(e) => {this.addressChange(e, null)}}
@@ -211,11 +239,25 @@ class EditProfile extends React.Component {
           </Input>
         </Form.Field>
         <label style={{fontSize: '20px', color: 'black'}}>Service</label>
+        {this.renderCurrentService()}
         <br/>
         <Dropdown style={{width: '400px', height: '5px', fontSize: '15px', position: 'absolute'}}
           placeholder='Select Service'
+          value={this.state.service}
           fluid selection options={this.state.listOfServices}
           onChange={this.serviceChange} />
+        <br/>
+        <br/>
+        <br/>
+        <br/>
+        <label style={{fontSize: '20px', color: 'black'}}>Value of Your Service</label>
+        {this.renderCurrentValue()}
+        <br/>
+        <Dropdown style={{width: '400px', height: '5px', fontSize: '15px', position: 'absolute'}}
+          placeholder='How much do you value your service from 1 - 10?'
+          fluid selection options={serviceValues}
+          value={this.state.serviceValue}
+          onChange={this.serviceValueChange} />
         <br/>
         <br/>
         <Form.Field>

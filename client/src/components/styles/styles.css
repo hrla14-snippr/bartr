@@ -237,6 +237,15 @@ h3 {
     border: 1px solid #73AD21;
 }
 
+.engagementcard > section {
+  display: inline-block;
+}
+
+.leftengagement, .rightengagement {
+  border: 1px solid black;
+  padding: 10px 5px;
+}
+
 .engagementlistentry {
     background: #e2e2e2; /* Old browsers */
     background: -moz-linear-gradient(top, #e2e2e2 0%, #dbdbdb 50%, #d1d1d1 51%, #fefefe 100%); /* FF3.6-15 */
@@ -325,4 +334,35 @@ h2.title {
   position: absolute;
   height: absolute;
   margin: 0 auto !important;
+}
+
+.calendar{
+  position: absolute;
+  left: 15%;
+  background: white;
+  height: 400px;
+  width: 70%;
+  overflow: auto;
+  margin-top: 25px;
+  top: 40%;
+}
+
+.msglist{
+  overflow: auto;
+  position: absolute;
+  width:  80%;
+  left: 10%;
+  height: 125px;
+  background-color: white;
+}
+
+.msgport{
+  position: absolute;
+  top: 20%;
+  width: 80%;
+  left: 10%;
+}
+
+.hidden{
+  display: none;
 }

@@ -6,6 +6,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "compile": "webpack -d -w",
+    "viewdb": "sqlite3 server/db/bartr.sqlite3",
     "hotstart": "webpack-dev-server",
     "heroku-postbuild": "webpack --config ./webpack.config.prod.js --progress --colors"
   },
@@ -22,12 +23,16 @@
   "homepage": "https://github.com/Shakahs/bartr#readme",
   "devDependencies": {
     "continuation-local-storage": "^3.2.0",
+    "css-loader": "^0.28.1",
     "gulp": "^3.9.1",
     "gulp-env": "^0.4.0",
     "gulp-nodemon": "^2.2.1",
     "gulp-util": "^3.0.8",
+    "moment": "^2.18.1",
+    "react-big-calendar": "^0.14.0",
     "sequelize-fixtures": "^0.5.6",
     "sqlite3": "^3.1.8",
+    "style-loader": "^0.16.1",
     "webpack-dev-server": "^2.4.5"
   },
   "dependencies": {
@@ -60,6 +65,7 @@
     "pg": "^6.1.5",
     "prop-types": "^15.5.8",
     "react": "^15.5.4",
+    "react-big-calendar": "^0.14.0",
     "react-bootstrap": "^0.31.0",
     "react-dom": "^15.5.4",
     "react-geosuggest": "^2.1.0",

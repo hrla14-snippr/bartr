@@ -15,13 +15,16 @@ env({
 
 //put this after .env file load as db needs some of those env variables
 const db = require('./server/db');
-
 const models = {
   'User': db.User,
   'Service': db.Service,
   'Engagement': db.Engagement,
+  'ServiceValue': db.ServiceValue,
+  'AdjustedServiceValue': db.AdjustedServiceValue,
+  'ServiceTransaction': db.ServiceTransaction,
   'Review': db.Review,
-  'Message': db.Message
+  'Message': db.Message,
+  'Schedule': db.Schedule,
 };
 
 gulp.task('seed:wipe', function(cb){
@@ -33,7 +36,16 @@ gulp.task('seed:wipe', function(cb){
       return Promise.all([db.Engagement.sync({force: true})])
     })
     .then(()=>{
-      return Promise.all([db.Message.sync({force: true}), db.Review.sync({force: true})])
+      return Promise.all([
+        db.Message.sync({force: true}),
+        db.Review.sync({force: true}),
+        db.ServiceValue.sync({force: true}),
+        db.AdjustedServiceValue.sync({force: true}),
+        db.ServiceTransaction.sync({force: true})
+      ])
+    })
+    .then(()=>{
+      return Promise.all([db.Schedule.sync({force: true})])
     })
     .then(()=>{
       if(process.env.DATABASE_URL.includes('postgres')){

@@ -1,17 +1,14 @@
 'use strict';
 
 const Sequelize = require('sequelize');
-const User = require('../db').User;
+const { User } = require('../db');
+const db = require('../db');
 const Service = require('../db/index').Service;
 const router = require('express').Router();
 const findAuth0User = require('./util').findAuth0User;
 
 router.get('/:auth0_id', (req, res, next) => {
-  User.findOne({
-    where: {
-      auth0_id: req.params.auth0_id
-    }
-  })
+  User.findOne({ where: { auth0_id: req.params.auth0_id }, include: [db.Service, db.ServiceValue] })
     .then(data => {
       console.log('User GET Request Successful');
       res.status(200).json(data);

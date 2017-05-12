@@ -28,6 +28,14 @@
     }
   },
   {
+    "model": "ServiceValue",
+    "data": {
+      "value": 2,
+      "user_id": 1,
+      "service_id": 1
+    }
+  },
+  {
     "model": "User",
     "data": {
       "id": 2,
@@ -39,6 +47,22 @@
       "geo_lat": 34.053739,
       "geo_long":  -118.312972,
       "service_provider_average_rating": 0
+    }
+  },
+  {
+    "model": "ServiceValue",
+    "data": {
+      "value": 5,
+      "user_id": 2,
+      "service_id": 1
+    }
+  },
+  {
+    "model": "ServiceValue",
+    "data": {
+      "value": 5,
+      "user_id": 2,
+      "service_id": 1
     }
   },
   {
@@ -56,6 +80,22 @@
     }
   },
   {
+    "model": "ServiceValue",
+    "data": {
+      "value": 4,
+      "user_id": 3,
+      "service_id": 2
+    }
+  },
+  {
+    "model": "ServiceValue",
+    "data": {
+      "value": 4,
+      "user_id": 3,
+      "service_id": 2
+    }
+  },
+  {
     "model": "User",
     "data": {
       "id": 4,
@@ -70,6 +110,14 @@
     }
   },
   {
+    "model": "ServiceValue",
+    "data": {
+      "value": 5,
+      "user_id": 4,
+      "service_id": 2
+    }
+  },
+  {
     "model": "User",
     "data": {
       "id": 5,
@@ -81,6 +129,22 @@
       "geo_lat": 34.001745,
       "geo_long":  -117.809078,
       "service_provider_average_rating": 0
+    }
+  },
+  {
+    "model": "ServiceValue",
+    "data": {
+      "value": 6,
+      "user_id": 5,
+      "service_id": 2
+    }
+  },
+  {
+    "model": "ServiceValue",
+    "data": {
+      "value": 6,
+      "user_id": 5,
+      "service_id": 2
     }
   }
 ]
