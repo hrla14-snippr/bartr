@@ -23,7 +23,7 @@ const EngageReqListEntries = (props) => {
     const config = {
       headers: {'Authorization': 'Bearer ' + localStorage.id_token}
     };
-    if (receiverUnits === 0 && senderUnits === 0) {
+    if (receiverUnits < 1 && senderUnits < 1) {
       swal({
         title: 'Unable to Submit',
         text: 'No Bartr has been made.',
