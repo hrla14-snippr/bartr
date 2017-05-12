@@ -7,13 +7,14 @@ import * as authActions from '../actions/Auth0Actions'
 import * as authSelectors from '../auth/Auth0Selectors'
 import { connect } from 'react-redux';
 import moment from 'moment';
-import events from './events';
 
 import BigCalendar from 'react-big-calendar';
 
 BigCalendar.momentLocalizer(moment);
 
 import 'react-big-calendar/lib/css/react-big-calendar.css';
+
+
 
 class Chat extends React.Component {
   constructor(props) {
@@ -23,17 +24,22 @@ class Chat extends React.Component {
       messages: [],
       message: '',
       engagementId: null,
+      currentEvents: [],
     }
     this.changeId = this.changeId.bind(this);
     this.handleMessage = this.handleMessage.bind(this);
     this.updateChatHistory = this.updateChatHistory.bind(this);
     this.handleIdAndMessage = this.handleIdAndMessage.bind(this);
     this.seeSchedule = this.seeSchedule.bind(this);
+    this.fetchSchedule = this.fetchSchedule.bind(this);
+    this.momentDate = this.momentDate.bind(this);
   }
 
   changeId(){
     // this.setState({messages:[]})
-    this.setState({engagementId: this.props.id})
+    this.setState({engagementId: this.props.id}, () => {
+      this.fetchSchedule();
+    })
   }
   
   handleMessage(event) {
@@ -85,10 +91,42 @@ class Chat extends React.Component {
   }
   seeSchedule() {
     this.setState({engagementId: this.props.id}, () => {
+      this.fetchSchedule();
       if(!this.state.engagementId) {
         alert('must select service provider first!');
       }
     });
+  }
+  momentDate(date) {
+      const year = parseInt(date.substring(0,4));
+      const month = parseInt(date.substring(5,7));
+      const day = parseInt(date.substring(8,10))
+      const hour = parseInt(date.substring(11,13))
+      const minute  = parseInt(date.substring(14,16))
+      return new Date(year, month, day, hour, minute, 0)
+  }
+  fetchSchedule() {
+    const config = {
+      headers: {'Authorization': 'Bearer ' + localStorage.getItem('id_token'),
+        'Content-Type': 'application/json' }
+    };
+    axios.get(`${API_ENDPOINT}/api/schedules/${this.state.engagementId}`, config)
+      .then((res) => {
+        console.log(res.data,'response from grabbing appointments');
+        const momentDates = res.data.map((date) => {
+          const event = {
+            title: 'booked',
+            start: this.momentDate(date.start),
+            end: this.momentDate(date.end),
+          }
+          return event;
+        });
+        console.log(momentDates);
+        this.setState({ currentEvents: momentDates });
+      })
+      .catch((err) => {
+        console.log(err, 'error from grabbing appointments');
+      })
   }
   render() {
     console.log(this.state, 'this is the state');
@@ -103,7 +141,7 @@ class Chat extends React.Component {
           <div className={this.state.engagementId ? 'calendar' : 'hidden'  }>
             <BigCalendar
               selectable
-              events={events}
+              events={this.state.currentEvents}
               defaultView='week'
               scrollToTime={new Date(1970, 1, 1, 6)}
               defaultDate={new Date()}
