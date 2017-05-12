@@ -139,11 +139,11 @@ const AdjustedServiceValue = sql.define('adjusted_service_value', {
 const ServiceTransaction = sql.define('service_transaction', {
 	sender_svc_units: {
 		type: Sequelize.INTEGER,
-		allowNull: false
+		defaultValue: 0
 	}, 
 	receiver_svc_units: {
 		type: Sequelize.INTEGER,
-		allowNull: false,
+		defaultValue: 0,
 	},
 	sender_svc_currval: {
 		type: Sequelize.INTEGER,
@@ -170,13 +170,11 @@ AdjustedServiceValue.hasMany(ServiceValue);
 
 ServiceTransaction.belongsTo(Service, { as: 'sender_service', foreignKey: { name: 'sender_service_id', allowNull: false }, onDelete: 'CASCADE' });
 ServiceTransaction.belongsTo(Service, { as: 'receiver_service', foreignKey: { name: 'receiver_service_id', allowNull: false }, onDelete: 'CASCADE' });
-Service.hasMany(ServiceTransaction, { as: 'sender_transaction', foreignKey: 'sender_transaction_id'});
-Service.hasMany(ServiceTransaction, { as: 'receiver_transaction', foreignKey: 'receiver_transaction_id'});
+Service.hasMany(ServiceTransaction, { as: 'sender_transaction', foreignKey: 'sender_service_id'});
+Service.hasMany(ServiceTransaction, { as: 'receiver_transaction', foreignKey: 'receiver_service_id'});
 
-ServiceTransaction.belongsTo(Engagement, { as: 'sent_engagement', foreignKey: { name: 'sent_engagement_id', allowNull: false }, onDelete: 'CASCADE' });
-ServiceTransaction.belongsTo(Engagement, { as: 'received_engagement', foreignKey: { name: 'received_engagement_id', allowNull: false }, onDelete: 'CASCADE' });
-Engagement.hasMany(ServiceTransaction, { as: 'sender_transaction', foreignKey: 'sender_transaction_id'});
-Engagement.hasMany(ServiceTransaction, { as: 'receiver_transaction', foreignKey: 'receiver_transaction_id'});
+ServiceTransaction.belongsTo(Engagement);
+Engagement.hasMany(ServiceTransaction);
 
 User.hasMany(Schedule);
 Schedule.belongsTo(User);
