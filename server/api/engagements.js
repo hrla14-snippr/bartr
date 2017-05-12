@@ -19,6 +19,7 @@ router.get('/', (req, res, next) => {
         where:{ $or: [{sender_id: user.id}, {receiver_id: user.id}], complete: showComplete },
         include: [
           { model: db.Message },
+          db.ServiceTransaction,
           { model: db.User, as: 'sender', include: [db.Service, db.ServiceValue] },
           { model: db.User, as: 'receiver', include: [db.Service, db.ServiceValue] },
           { model: db.Review },

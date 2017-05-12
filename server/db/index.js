@@ -173,8 +173,7 @@ ServiceTransaction.belongsTo(Service, { as: 'receiver_service', foreignKey: { na
 Service.hasMany(ServiceTransaction, { as: 'sender_transaction', foreignKey: 'sender_service_id'});
 Service.hasMany(ServiceTransaction, { as: 'receiver_transaction', foreignKey: 'receiver_service_id'});
 
-ServiceTransaction.belongsTo(Engagement);
-Engagement.hasMany(ServiceTransaction);
+Engagement.hasOne(ServiceTransaction);
 
 User.hasMany(Schedule);
 Schedule.belongsTo(User);
