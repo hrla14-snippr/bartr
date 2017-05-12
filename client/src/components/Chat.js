@@ -25,6 +25,7 @@ class Chat extends React.Component {
       message: '',
       engagementId: null,
       currentEvents: [],
+      engId: null,
     }
     this.changeId = this.changeId.bind(this);
     this.handleMessage = this.handleMessage.bind(this);
@@ -36,10 +37,12 @@ class Chat extends React.Component {
   }
 
   changeId(){
+    console.log('this is props id ', this.props.id);
     // this.setState({messages:[]})
-    this.setState({engagementId: this.props.id}, () => {
+    this.setState({engagementId: this.props.id})
+    this.setState({engId: this.props.id}, () => {
       this.fetchSchedule();
-    })
+    });
   }
   
   handleMessage(event) {
@@ -81,7 +84,7 @@ class Chat extends React.Component {
       headers: {'Authorization': 'Bearer ' + localStorage.getItem('id_token'),
         'Content-Type': 'application/json' }
     };
-    axios.post(`${API_ENDPOINT}/api/schedules`, {start: sched.start, end: sched.end, user_id: this.state.engagementId }, config)
+    axios.post(`${API_ENDPOINT}/api/schedules`, {start: sched.start, end: sched.end, user_id: this.state.engId }, config)
       .then((res) => {
         console.log(res,'response from posting appointment');
       })
@@ -90,16 +93,16 @@ class Chat extends React.Component {
       })
   }
   seeSchedule() {
-    this.setState({engagementId: this.props.id}, () => {
+    this.setState({engId: this.props.id}, () => {
       this.fetchSchedule();
-      if(!this.state.engagementId) {
+      if(!this.state.engId) {
         alert('must select service provider first!');
       }
     });
   }
   momentDate(date) {
-      const year = parseInt(date.substring(0,4)) -1;
-      const month = parseInt(date.substring(5,7));
+      const year = parseInt(date.substring(0,4));
+      const month = parseInt(date.substring(5,7)) -1;
       const day = parseInt(date.substring(8,10))
       const hour = parseInt(date.substring(11,13))
       const minute  = parseInt(date.substring(14,16) )
@@ -111,7 +114,7 @@ class Chat extends React.Component {
       headers: {'Authorization': 'Bearer ' + localStorage.getItem('id_token'),
         'Content-Type': 'application/json' }
     };
-    axios.get(`${API_ENDPOINT}/api/schedules/${this.state.engagementId}`, config)
+    axios.get(`${API_ENDPOINT}/api/schedules/${this.state.engId}`, config)
       .then((res) => {
         console.log(res.data,'response from grabbing appointments');
         const momentDates = res.data.map((date) => {
@@ -131,7 +134,7 @@ class Chat extends React.Component {
       })
   }
   render() {
-    console.log(this.state, 'this is the state');
+    console.log(this.state, 'this is the state', this.props.id);
       return (
         <div className="chatbox">
           <ChatList messages={this.props.messages}/>
@@ -140,11 +143,11 @@ class Chat extends React.Component {
             <Form.Field control={Button}>Submit</Form.Field>
             <Form.Field onClick={this.seeSchedule} control={Button}>See service providers schedule</Form.Field>
           </Form>
-          <div className={this.state.engagementId ? 'calendar' : 'hidden'  }>
+          <div className={this.state.engId ? 'calendar' : 'hidden'  }>
             <BigCalendar
               selectable
               events={this.state.currentEvents}
-              defaultView='week'
+              defaultView='day'
               scrollToTime={new Date()}
               defaultDate={new Date()}
               onSelectEvent={event => alert(event.title)}
@@ -153,7 +156,7 @@ class Chat extends React.Component {
                     `selected slot: \n\nstart ${slotInfo.start.toLocaleString()} ` +
                     `\nend: ${slotInfo.end.toLocaleString()}`)
                   console.log('this is the slot info obj ', slotInfo);
-                  console.log('this is the engagement id ', this.state.engagementId);
+                  console.log('this is the engagement id ', this.state.engId);
                   this.postAppointments(slotInfo);
                 }
               }
