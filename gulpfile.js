@@ -107,7 +107,7 @@ gulp.task("webpackhot", function(callback) {
 gulp.task('calcworker', function(callback) {
   let store = {};
   let optionStore = [];
-  // setInterval(() => {
+  const nextCalc = () => {
     db.ServiceTransaction
       .findAll({ where: { accepted: true } })
       .then((data) => {
@@ -136,7 +136,9 @@ gulp.task('calcworker', function(callback) {
         return db.AverageASV.bulkCreate(optionStore);
       })
       .then(data => console.log('Inserted new Average ASVs!'));
-  // }, 10000)
+  }
+  nextCalc();
+  setInterval(nextCalc, 60000)
 });
 
 gulp.task('default', ['nodemon', 'watch', 'webpackhot', 'calcworker']);
