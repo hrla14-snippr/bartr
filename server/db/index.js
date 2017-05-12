@@ -129,16 +129,11 @@ const ServiceValue = sql.define('service_value', {
 	}
 });
 
-const AdjustedServiceValue = sql.define('adjusted_service_value', {
+const AverageASV = sql.define('average_asv', {
 	value: {
-		type: Sequelize.INTEGER,
+		type: Sequelize.FLOAT,
 		allowNull: false
 	},
-	service_id: {
-		type: Sequelize.INTEGER,
-		allowNull: false,
-		primaryKey: true
-	}
 });
 
 const ServiceTransaction = sql.define('service_transaction', {
@@ -158,6 +153,14 @@ const ServiceTransaction = sql.define('service_transaction', {
 		type: Sequelize.INTEGER,
 		allowNull: false
 	},
+	sender_asv: {
+		type: Sequelize.FLOAT,
+		allowNull: false
+	},
+	receiver_asv: {
+		type: Sequelize.FLOAT,
+		allowNull: false
+	},
 	accepted: {
 		type: Sequelize.BOOLEAN,
 		allowNull: false,
@@ -170,9 +173,8 @@ Service.hasMany(User);
 User.hasOne(ServiceValue);
 ServiceValue.belongsTo(Service);
 Service.hasMany(ServiceValue);
-Service.hasOne(AdjustedServiceValue);
-ServiceValue.belongsTo(AdjustedServiceValue);
-AdjustedServiceValue.hasMany(ServiceValue);
+AverageASV.belongsTo(Service);
+Service.hasMany(AverageASV);
 
 ServiceTransaction.belongsTo(Service, { as: 'sender_service', foreignKey: { name: 'sender_service_id', allowNull: false }, onDelete: 'CASCADE' });
 ServiceTransaction.belongsTo(Service, { as: 'receiver_service', foreignKey: { name: 'receiver_service_id', allowNull: false }, onDelete: 'CASCADE' });
@@ -206,7 +208,7 @@ User.hasMany(Review, { as: 'received_reviews',foreignKey: 'receiver_id'});
 module.exports.User = User;
 module.exports.Service = Service;
 module.exports.ServiceValue = ServiceValue;
-module.exports.AdjustedServiceValue = AdjustedServiceValue;
+module.exports.AverageASV = AverageASV;
 module.exports.ServiceTransaction = ServiceTransaction;
 module.exports.Review = Review;
 module.exports.Message = Message;
