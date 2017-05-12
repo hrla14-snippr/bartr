@@ -18,6 +18,8 @@ const EngageReqListEntries = (props) => {
     senderUnits = result.value;
   };
 
+  // const updateBartr
+
   _.each(currentEngagement.messages, message => {
     currMessages = [...currMessages, message.message] 
   })
@@ -43,12 +45,22 @@ const EngageReqListEntries = (props) => {
     const config = {
       headers: {'Authorization': 'Bearer ' + localStorage.id_token}
     };
-    
-    axios.put(`${API_ENDPOINT}/api/engagements/${selectedEngagement.id}`, {
-      where: {
-        id: selectedEngagement.id
-      }
+    // sender_svc_units: req.body.sender_svc_units,
+    // receiver_svc_units: req.body.receiver_svc_units
+    axios.put(`${API_ENDPOINT}/api/services/transaction`, {
+      sender_svc_units: senderUnits,
+      receiver_svc_units: receiverUnits,
+      engagement_id: selectedEngagement.id,
+      accepted: true
     }, config)
+      .then((res) => {
+        console.log('Transaction accepted', res);
+        return axios.put(`${API_ENDPOINT}/api/engagements/${selectedEngagement.id}`, {
+          where: {
+            id: selectedEngagement.id
+          }
+        }, config)
+      })
     .then(data => {
       console.log('Engagement updated! ', data);
       swal({

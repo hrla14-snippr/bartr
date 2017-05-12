@@ -85,8 +85,16 @@ router.get('/adjustedValue', (req, res) => {
 })
 
 router.put('/transaction', (req, res) => {
-  // db.ServiceTransaction
-  //   .upsert
+  const options = {
+    sender_svc_units: req.body.sender_svc_units,
+    receiver_svc_units: req.body.receiver_svc_units
+  };
+  if (req.body.accepted) {
+    options.accepted = req.body.accepted;
+  }
+  db.ServiceTransaction
+    .update(options, { where: { engagement_id: req.body.engagement_id } })
+    .then(data => res.json(data))
 })
 
 router.post('/', (req, res, next) => {
