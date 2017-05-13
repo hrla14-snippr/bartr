@@ -9,6 +9,7 @@ import './styles/userProfileStyles.css';
 class UserProfile extends React.Component {
   constructor (props) {
     super (props);
+
     this.state = {
       name: '',
       address: '',
@@ -18,15 +19,13 @@ class UserProfile extends React.Component {
       listOfServices: [] ,
       avgRating: null
     }
-
+    
     this.fetchUser = this.fetchUser.bind(this);
     this.fetchScore = this.fetchScore.bind(this);
     this.loadMap = this.loadMap.bind(this);
   }
 
   componentDidMount() {
-    console.log('id are:',this.props.children.props.params.auth0_id)
-
     this.getServices();
     this.fetchUser();
 
@@ -49,27 +48,17 @@ class UserProfile extends React.Component {
         console.log('Error loading listOfServices: ', err);
       })
   }
-  hashCode(str){
-    var hash = 0;
-    if (str.length == 0) return hash;
-    for (let i = 0; i < str.length; i++) {
-        let char = str.charCodeAt(i);
-        hash = ((hash<<5)-hash)+char;
-        hash = hash & hash; // Convert to 32bit integer
-    }
-    return hash;
-  }
+
   fetchUser() {
-    console.log('stuff is ',this.hashCode(this.props.children.props.params.auth0_id))
-    let auth = hashCode(hashthis.props.children.props.params.auth0_id) || JSON.parse(localStorage.profile).user_id
+    let auth = JSON.parse(localStorage.profile).user_id
     const config = {
       headers: {
         'Authorization': 'Bearer ' + localStorage.id_token
       }
     }
     axios.get(API_ENDPOINT + `/api/users/${auth}`, config)
-    .then((res) => {
-
+      .then((res) => {
+        
         console.log("the response inside axios.get of UserProfile is ", res);
 
         let userService = null;
@@ -97,7 +86,7 @@ class UserProfile extends React.Component {
     const homeUrl = "https://cdn3.iconfinder.com/data/icons/map-markers-1/512/residence-512.png";
       const google = window.google;
       const maps = google.maps;
-
+      
       const mapRef = this.refs.map;
       const node = ReactDOM.findDOMNode(mapRef);
 
@@ -129,8 +118,6 @@ class UserProfile extends React.Component {
 
   render() {
     console.log(this.state)
-    const auth = this.props.children.props.params.auth0_id || JSON.parse(localStorage.profile).user_id;
-    const editpoint = `/editprofile/${auth}`
     return(
       <div className='body'>
         <div className="profile-page-content">
@@ -143,9 +130,9 @@ class UserProfile extends React.Component {
               <h1 className="name">{this.state.name}</h1>
               <p className="service">{this.state.service ? this.state.service : null}</p>
               <p><span className="address">Average Service Provider Rating:</span><span className="service">{this.state.avgRating === null ? 0 : this.state.avgRating}</span></p>
-            </div>
+            </div> 
             <div className="address">{this.state.address ? this.state.address : null}</div>
-            <Link to={editpoint} ><button>Edit Profile</button></Link>
+            <Link to='/editprofile'><button>Edit Profile</button></Link>
           </div>
           <div className="google-maps" ref="map"/>
         </div>

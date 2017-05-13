@@ -7,25 +7,10 @@ import { bindActionCreators } from 'redux';
 import * as authActions from '../actions/Auth0Actions'
 import * as authSelectors from '../auth/Auth0Selectors'
 import { connect } from 'react-redux';
-import { hashHistory } from 'react-router';
 
 const ServiceProviderList = (props) => {
 
-  const renderAProfile = (event, user) => {
-    console.log(event);
-    console.log(user);
-    const hashCode = (str) => {
-      var hash = 0;
-      if (str.length == 0) return hash;
-      for (let i = 0; i < str.length; i++) {
-          let char = str.charCodeAt(i);
-          hash = ((hash<<5)-hash)+char;
-          hash = hash & hash; // Convert to 32bit integer
-      }
-      return hash;
-    }
-    hashHistory.push(`profile/${hashCode(user.value.auth0_id)}`)
-  }
+
   const requestService = (event, user) => {
       event.preventDefault();
       const config = {
@@ -91,7 +76,7 @@ const ServiceProviderList = (props) => {
               <Button value={user} onClick={(event, user) => {requestService(event, user.value)}}>
                 Request Service
               </Button>
-              <Button value={user} onClick={(event, user) => renderAProfile(event, user)}>
+              <Button >
                 Go to Profile
               </Button>
             </Card>
