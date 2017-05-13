@@ -36,6 +36,7 @@ class EditProfile extends React.Component {
     this.handleSubmit = this.handleSubmit.bind(this);
     this.renderCurrentValue = this.renderCurrentValue.bind(this);
     this.renderCurrentService = this.renderCurrentService.bind(this);
+    this.onDrop = this.onDrop.bind(this);
   }
 
   componentDidMount() {
@@ -254,11 +255,11 @@ class EditProfile extends React.Component {
         <label style={{fontSize: '20px', color: 'black'}}>Service</label>
         {this.renderCurrentService()}
         <br/>
-        <Dropdown style={{width: '400px', height: '5px', fontSize: '15px', position: 'absolute'}}
+        <center><Dropdown style={{width: '400px', height: '5px', fontSize: '15px', position: 'absolute'}}
           placeholder='Select Service'
           value={this.state.service}
           fluid selection options={this.state.listOfServices}
-          onChange={this.serviceChange} />
+          onChange={this.serviceChange} /></center>
         <br/>
         <br/>
         <br/>
