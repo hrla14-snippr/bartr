@@ -2,6 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import { Router, Route, IndexRoute, IndexRedirect, hashHistory } from 'react-router';
 import { syncHistoryWithStore } from 'react-router-redux';
+import { configureUrlQuery } from 'react-url-query';
 
 import { Provider } from 'react-redux';
 import { createStore, applyMiddleware } from 'redux';
@@ -38,7 +39,8 @@ class Routing extends React.Component {
     // creating store and history
     const store = createStoreWithMiddleware();
     const history = syncHistoryWithStore(hashHistory, store);
-    
+    configureUrlQuery({ history: history });
+
     return (
       <Provider store={store}>
         <Router history={history}>
@@ -48,9 +50,11 @@ class Routing extends React.Component {
             <Route path='/home' component={HomeContainer}/>
             <Route path='/profile' component={ProfileContainer}/>
             <Route path='/servicegraph' component={ServiceGraph}/>
+            <Route path='/profile/:auth0_id' component={ProfileContainer}/>
             <Route path='/currentengagements' component={EngageReq}/>
             <Route path='/map' component={ServiceMapContainer}/>
             <Route path='/editprofile' component={EditProfile}/>
+            <Route path='/editprofile/:auth0_id' component={EditProfile}/>
             <Route path='/pastengagements' component={PastEngagements}/>
           </Route>
         </Router>
@@ -62,4 +66,3 @@ class Routing extends React.Component {
 // ReactDOM.render(<Routing/>, document.getElementById('app'));
 
 export default Routing;
-

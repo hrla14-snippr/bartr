@@ -72,6 +72,8 @@ router.post('/', (req, res, next) => {
         receiverValue = dataValues;
       }
     });
+    console.log('sender is', senderValue);
+    console.log('receiver val is ',receiverValue);
     return db.ServiceTransaction
       .create({
         engagement_id,
@@ -81,7 +83,7 @@ router.post('/', (req, res, next) => {
         receiver_service_id: receiverValue.service_id
       })
   })
-  .then(() => res.status(201).send('Created engagement and service transaction.'))
+  // .then(() => res.status(201).send('Created engagement and service transaction.'))
 })
 
 router.put('/:engagement_id', (req, res, next) => {
