@@ -2,6 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import { Router, Route, IndexRoute, IndexRedirect, hashHistory } from 'react-router';
 import { syncHistoryWithStore } from 'react-router-redux';
+import { configureUrlQuery } from 'react-url-query';
 
 import { Provider } from 'react-redux';
 import { createStore, applyMiddleware } from 'redux';
@@ -38,6 +39,7 @@ class Routing extends React.Component {
     // creating store and history
     const store = createStoreWithMiddleware();
     const history = syncHistoryWithStore(hashHistory, store);
+    configureUrlQuery({ history: history });
 
     return (
       <Provider store={store}>

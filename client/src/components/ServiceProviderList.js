@@ -14,7 +14,17 @@ const ServiceProviderList = (props) => {
   const renderAProfile = (event, user) => {
     console.log(event);
     console.log(user);
-    hashHistory.push(`profile/${user.value.auth0_id}`)
+    const hashCode = (str) => {
+      var hash = 0;
+      if (str.length == 0) return hash;
+      for (let i = 0; i < str.length; i++) {
+          let char = str.charCodeAt(i);
+          hash = ((hash<<5)-hash)+char;
+          hash = hash & hash; // Convert to 32bit integer
+      }
+      return hash;
+    }
+    hashHistory.push(`profile/${hashCode(user.value.auth0_id)}`)
   }
   const requestService = (event, user) => {
       event.preventDefault();
