@@ -6,6 +6,8 @@ import { Button, Checkbox, Form, Dropdown, Input } from 'semantic-ui-react';
 import { geocodeByAddress } from 'react-places-autocomplete';
 import Autocomplete from 'react-google-autocomplete';
 import { hashHistory } from 'react-router';
+import Dropzone from 'react-dropzone';
+import superagent from 'superagent';
 import './styles/styles.css';
 
 class EditProfile extends React.Component {
@@ -34,6 +36,7 @@ class EditProfile extends React.Component {
     this.handleSubmit = this.handleSubmit.bind(this);
     this.renderCurrentValue = this.renderCurrentValue.bind(this);
     this.renderCurrentService = this.renderCurrentService.bind(this);
+    this.onDrop = this.onDrop.bind(this);
   }
 
   componentDidMount() {
@@ -47,7 +50,7 @@ class EditProfile extends React.Component {
   }
 
   setInitialInfo() {
-    const auth0_id = JSON.parse(localStorage.profile).user_id;
+    const auth0_id = this.props.children.props.params.auth0_id || JSON.parse(localStorage.profile).user_id;
     const config = {
         headers: {
           Authorization: `Bearer ${localStorage.id_token}`
@@ -212,6 +215,17 @@ class EditProfile extends React.Component {
     if (this.state.service) return <p>{`Your current service is: ${this.state.service}`}</p>
   }
 
+  onDrop(files) {
+    console.log(this.state.userInfo);
+    // console.log(props)
+    // superagent.post(`/api/users/upload/${this.state.userInfo.auth0_id}`)
+    // .attach('theseNamesMustMatch', files[0])
+    // .end((err) => {
+    //   if (err) console.log(err);
+    //   return console.log('File uploaded!');
+    // });
+  }
+
   render() {
     console.log('this.props in editprofile: ', this.props)
     const serviceValues = _.range(1, 11).map((num) => ({ key: num, text: num, value: num }));
@@ -241,11 +255,11 @@ class EditProfile extends React.Component {
         <label style={{fontSize: '20px', color: 'black'}}>Service</label>
         {this.renderCurrentService()}
         <br/>
-        <Dropdown style={{width: '400px', height: '5px', fontSize: '15px', position: 'absolute'}}
+        <center><Dropdown style={{width: '400px', height: '5px', fontSize: '15px', position: 'absolute'}}
           placeholder='Select Service'
           value={this.state.service}
           fluid selection options={this.state.listOfServices}
-          onChange={this.serviceChange} />
+          onChange={this.serviceChange} /></center>
         <br/>
         <br/>
         <br/>
@@ -263,6 +277,12 @@ class EditProfile extends React.Component {
         <Form.Field>
           <label style={{marginTop: '25px', fontSize: '20px', color: 'black'}}>Can't Find Your Skill? Add a Service!</label>
           <Input style={{width: '400px', height: '25px', fontSize: '20px'}} placeholder='Service' onChange={(event) => {this.newServiceChange(event)}}/>
+        </Form.Field>
+        <Form.Field>
+          <label style={{marginTop: '25px', fontSize: '20px', color: 'black'}}>Upload Profile Picture</label>
+          <Dropzone onDrop={this.onDrop} multiple={false}>
+            <div>Try dropping a file here, or click to select a file to upload.</div>
+          </Dropzone>
         </Form.Field>
         <h1><Button type='button' onClick={this.handleSubmit}>Submit</Button></h1>
       </Form>
