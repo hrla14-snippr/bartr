@@ -49,9 +49,19 @@ class UserProfile extends React.Component {
         console.log('Error loading listOfServices: ', err);
       })
   }
-
+  hashCode(str){
+    var hash = 0;
+    if (str.length == 0) return hash;
+    for (let i = 0; i < str.length; i++) {
+        let char = str.charCodeAt(i);
+        hash = ((hash<<5)-hash)+char;
+        hash = hash & hash; // Convert to 32bit integer
+    }
+    return hash;
+  }
   fetchUser() {
-    let auth = this.props.children.props.params.auth0_id || JSON.parse(localStorage.profile).user_id
+    console.log('stuff is ',this.hashCode(this.props.children.props.params.auth0_id))
+    let auth = hashCode(hashthis.props.children.props.params.auth0_id) || JSON.parse(localStorage.profile).user_id
     const config = {
       headers: {
         'Authorization': 'Bearer ' + localStorage.id_token
