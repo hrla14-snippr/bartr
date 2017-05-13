@@ -35,6 +35,7 @@ class NavBar extends React.Component {
               ) : (
                 <NavDropdown eventKey={3} title={<span><Icon size='large' name='list layout'/></span>} id="basic-nav-dropdown">
                   <MenuItem eventKey={3.1} onClick={() => hashHistory.push('profile')}><Icon name='user'/>Profile</MenuItem>
+                  <MenuItem eventKey={3.1} onClick={() => hashHistory.push('servicegraph')}><Icon name='line chart'/>Service Market</MenuItem>
                   <MenuItem eventKey={3.2} onClick={() => hashHistory.push('pastengagements')}><Icon name='calendar'/>Past Engagements</MenuItem>
                   <MenuItem eventKey={3.3} onClick={() => hashHistory.push('currentengagements')}><Icon name='comments'/>Current Engagements</MenuItem>
                   <MenuItem eventKey={3.4} onClick={() => hashHistory.push('map')}><Icon name='map'/>Map</MenuItem>
