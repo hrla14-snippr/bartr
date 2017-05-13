@@ -7,10 +7,15 @@ import { bindActionCreators } from 'redux';
 import * as authActions from '../actions/Auth0Actions'
 import * as authSelectors from '../auth/Auth0Selectors'
 import { connect } from 'react-redux';
+import { hashHistory } from 'react-router';
 
 const ServiceProviderList = (props) => {
 
-
+  const renderAProfile = (event, user) => {
+    console.log(event);
+    console.log(user);
+    hashHistory.push(`profile/${user.value.auth0_id}`)
+  }
   const requestService = (event, user) => {
       event.preventDefault();
       const config = {
@@ -76,7 +81,7 @@ const ServiceProviderList = (props) => {
               <Button value={user} onClick={(event, user) => {requestService(event, user.value)}}>
                 Request Service
               </Button>
-              <Button >
+              <Button value={user} onClick={(event, user) => renderAProfile(event, user)}>
                 Go to Profile
               </Button>
             </Card>
