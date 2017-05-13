@@ -111,8 +111,6 @@ gulp.task('calcworker', function(callback) {
     db.ServiceTransaction
       .findAll({ where: { accepted: true } })
       .then((data) => {
-        // iterate over datavalues and push ASVs into store OBJ. calc average after and bulkcreate actual ASV table. maybe change name of table
-        // populate store with adjustedservicetrans data
         _.each(data, ({ dataValues }) => {
           if (!store[dataValues.sender_service_id]) {
             store[dataValues.sender_service_id] = [];
@@ -125,10 +123,13 @@ gulp.task('calcworker', function(callback) {
         });
         // calc avg value of each service found
         _.each(store, (asv, key) => {
-          let avg = _.reduce(asv, (a, b) => a + b) / asv.length;
+          let avg = _.reduce(asv, (a, b) => {
+            return a + b;
+          }) / asv.length;
+          console.log(key, avg);
           optionStore.push({
             service_id: key,
-            value: avg
+            value: parseFloat(avg.toFixed(3))
           })
         });
         console.log('optionStore', optionStore)
@@ -138,7 +139,8 @@ gulp.task('calcworker', function(callback) {
       .then(data => console.log('Inserted new Average ASVs!'));
   }
   nextCalc();
-  setInterval(nextCalc, 60000)
+  // run every 5 min
+  setInterval(nextCalc, process.env.CALC_INTERVAL)
 });
 
 gulp.task('default', ['nodemon', 'watch', 'webpackhot', 'calcworker']);
