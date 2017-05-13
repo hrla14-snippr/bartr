@@ -49,7 +49,7 @@ export function* loginRequestSaga() {
     yield put(loginSuccess(profile, idToken));
     console.log('push new location')
     // yield put(push('/'));
-    hashHistory.push('/')
+    hashHistory.push('/');
   } catch (error) {
     yield put(loginFailure(error));
     // yield put(push('/'));
