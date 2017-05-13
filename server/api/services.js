@@ -4,6 +4,7 @@ const Sequelize = require('sequelize');
 const db = require('../db');
 const router = require('express').Router();
 
+const _ = require('lodash');
 const util = require('./util');
 const getBoundingBox = require('./util').getBoundingBox;
 
@@ -82,7 +83,15 @@ router.post('/value', (req, res) => {
 })
 
 router.get('/adjustedValue', (req, res) => {
-  // /adjustedValue?service=someService
+  console.log('hit', req.url)
+  let services;
+  db.Service.findAll()
+    .then((data) => {
+      services = _.map(data, service => service.type);
+      return db.AverageASV.findAll({ limit: 100, order: '"updatedAt" DESC' });
+    })
+    .then(asv => res.json({ services, asv }))
+    .catch(e => console.log('Error fetching ASVs at /adjustedValue', e));
 })
 
 router.put('/transaction', (req, res) => {

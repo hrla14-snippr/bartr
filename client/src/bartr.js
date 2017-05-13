@@ -14,6 +14,7 @@ import ProfileContainer from './containers/ProfileContainer';
 import PastEngagements from './components/PastEngagements';
 import EngageReq from './components/EngageReq';
 import EditProfile from './components/EditProfile';
+import ServiceGraph from './components/ServiceGraph';
 import AuthService from './utils/Auth0Utils';
 import ServiceMapContainer from './containers/ServiceMapContainer';
 import '../../node_modules/sweetalert/dist/sweetalert.css'
@@ -46,6 +47,7 @@ class Routing extends React.Component {
             <IndexRedirect to='/home'/>
             <Route path='/home' component={HomeContainer}/>
             <Route path='/profile' component={ProfileContainer}/>
+            <Route path='/servicegraph' component={ServiceGraph}/>
             <Route path='/currentengagements' component={EngageReq}/>
             <Route path='/map' component={ServiceMapContainer}/>
             <Route path='/editprofile' component={EditProfile}/>

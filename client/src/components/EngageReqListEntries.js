@@ -87,6 +87,8 @@ const EngageReqListEntries = (props) => {
     } else {
       axios.put(`${API_ENDPOINT}/api/services/transaction`, {
         sender_svc_units: senderUnits,
+        sender_val: currentEngagement.sender.service_value.value,
+        receiver_val: currentEngagement.receiver.service_value.value,
         receiver_svc_units: receiverUnits,
         engagement_id: selectedEngagement.id,
         accepted: true
