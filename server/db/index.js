@@ -150,12 +150,10 @@ const ServiceTransaction = sql.define('service_transaction', {
 		allowNull: false
 	},
 	sender_asv: {
-		type: Sequelize.FLOAT,
-		allowNull: false
+		type: Sequelize.FLOAT
 	},
 	receiver_asv: {
-		type: Sequelize.FLOAT,
-		allowNull: false
+		type: Sequelize.FLOAT
 	},
 	accepted: {
 		type: Sequelize.BOOLEAN,
