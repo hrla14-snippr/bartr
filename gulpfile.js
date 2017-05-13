@@ -105,9 +105,9 @@ gulp.task("webpackhot", function(callback) {
 });
 
 gulp.task('calcworker', function(callback) {
-  let store = {};
-  let optionStore = [];
   const nextCalc = () => {
+    let store = {};
+    let optionStore = [];
     db.ServiceTransaction
       .findAll({ where: { accepted: true } })
       .then((data) => {
@@ -126,20 +126,18 @@ gulp.task('calcworker', function(callback) {
           let avg = _.reduce(asv, (a, b) => {
             return a + b;
           }) / asv.length;
-          console.log(key, avg);
           optionStore.push({
             service_id: key,
             value: parseFloat(avg.toFixed(3))
           })
         });
-        console.log('optionStore', optionStore)
         // pass store into bulkcreate adjustedservicetrans
         return db.AverageASV.bulkCreate(optionStore);
       })
       .then(data => console.log('Inserted new Average ASVs!'));
   }
   nextCalc();
-  // run every 5 min
+  // run per interval defined in .env
   setInterval(nextCalc, process.env.CALC_INTERVAL)
 });
 

@@ -88,7 +88,7 @@ router.get('/adjustedValue', (req, res) => {
   db.Service.findAll()
     .then((data) => {
       services = _.map(data, service => service.type);
-      return db.AverageASV.findAll({ limit: 100, order: '"updatedAt" DESC' });
+      return db.AverageASV.findAll({ limit: 100, order: [['created_at', 'DESC']] });
     })
     .then(asv => res.json({ services, asv }))
     .catch(e => console.log('Error fetching ASVs at /adjustedValue', e));

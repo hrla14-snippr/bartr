@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Line } from 'react-chartjs-2';
-import { Dropdown } from 'semantic-ui-react';
+import { Button } from 'semantic-ui-react';
 import axios from 'axios';
 
 class ServiceGraph extends Component {
@@ -22,7 +22,7 @@ class ServiceGraph extends Component {
     this.fetchASVs();
   }
 
-  makeTemplate(service) {
+  makeTemplate(services) {
     // dynamically set label and data
     // labels are interval of time between each avg calculation
     // data is each calculated avg
@@ -30,7 +30,7 @@ class ServiceGraph extends Component {
       labels: [],
       datasets: []
     };
-    const datasetTemplate = {
+    const datasetTemplate = () => ({
       // label: 'Value of [service chosen]',
       // data: [12, 19, 3, 5, 2, 3],
       backgroundColor: [
@@ -50,12 +50,15 @@ class ServiceGraph extends Component {
         'rgba(255, 159, 64, 1)'
       ],
       borderWidth: 1
-    };
-    datasetTemplate.label = `Value of ${service} service`;
-    datasetTemplate.data = this.state.serviceStore[service];
+    });
+    for (let service in services) {
+      let temp = datasetTemplate();
+      temp.label = `Value of ${service} service`;
+      temp.data = services[service];
+      template.datasets.push(temp);
+    }
     // time intervals in labels
-    template.labels = this.calcIntervals(datasetTemplate.data.length);
-    template.datasets.push(datasetTemplate);
+    template.labels = this.calcIntervals(template.datasets[0].data.length);
     return template;
   }
 
@@ -63,9 +66,9 @@ class ServiceGraph extends Component {
     const intervals = [];
     const start = new Date() - (CALC_INTERVAL * len);
     for (let i = 0, j = start; i < len; i++, j += parseInt(CALC_INTERVAL)) {
-      intervals.push(j);
+      let tempdate = new Date(j);
+      intervals.unshift(`${tempdate.getHours()}:${tempdate.getMinutes()}:${tempdate.getSeconds()}`);
     }
-    console.log(intervals);
     return intervals;
   }
 
@@ -76,13 +79,12 @@ class ServiceGraph extends Component {
     axios.get(API_ENDPOINT + '/api/services/adjustedValue', config)
       .then(({ data }) => {
         let serviceStore = {};
-        console.log(data);
         _.each(data.services, (service) => serviceStore[service] = []);
         _.each(data.asv, (asv) => {
           let service = data.services[asv.service_id - 1];
-          serviceStore[service].push(asv.value);
+          serviceStore[service].unshift(asv.value);
         });
-        this.setState({ serviceStore });
+        this.setState({ data: this.makeTemplate(serviceStore) });
       })
       .catch(e => console.log('Error fetching ASVs', e));
   }
@@ -105,7 +107,7 @@ class ServiceGraph extends Component {
     return (
       <div>
         {this.renderChart()}
-        <Dropdown placeholder="Select a service" options={options} onChange={this.filterService}/>
+        <Button onClick={this.fetchASVs}>Refresh</Button>
       </div>
     );
   }
