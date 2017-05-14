@@ -137,7 +137,7 @@ class Chat extends React.Component {
       const year = parseInt(date.substring(0,4));
       const month = parseInt(date.substring(5,7)) -1;
       const day = parseInt(date.substring(8,10))
-      const hour = parseInt(date.substring(11,13))
+      const hour = parseInt(date.substring(11,13)) - 7;
       const minute  = parseInt(date.substring(14,16) )
       return new Date(year, month, day, hour, minute, 0)
   }
